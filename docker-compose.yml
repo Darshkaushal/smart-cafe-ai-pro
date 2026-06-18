@@ -1,0 +1,53 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: smart-cafe-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: smart_cafe_ai
+      MYSQL_USER: cafe_user
+      MYSQL_PASSWORD: cafe_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - smart_cafe_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./apps/api
+    container_name: smart-cafe-api
+    restart: unless-stopped
+    env_file:
+      - ./apps/api/.env.example
+    environment:
+      DATABASE_URL: "mysql://cafe_user:cafe_pass@mysql:3306/smart_cafe_ai"
+      CLIENT_URL: "http://localhost:3000"
+      ADMIN_URL: "http://localhost:3001"
+    ports:
+      - "4000:4000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  ml:
+    build:
+      context: ./apps/ml
+    container_name: smart-cafe-ml
+    restart: unless-stopped
+    env_file:
+      - ./apps/ml/.env.example
+    environment:
+      DATABASE_URL: "mysql+pymysql://cafe_user:cafe_pass@mysql:3306/smart_cafe_ai"
+      CAFE_TOTAL_SEATS: "60"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  smart_cafe_mysql:

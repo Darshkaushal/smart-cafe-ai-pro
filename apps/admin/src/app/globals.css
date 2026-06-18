@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #080B14;
+  color: white;
+}
+
+.admin-card {
+  @apply rounded-3xl border border-admin-line bg-admin-panel/80 p-5 shadow-2xl;
+}
+
+.admin-input {
+  @apply w-full rounded-2xl border border-admin-line bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35 focus:border-admin-gold;
+}
+
+.admin-btn {
+  @apply rounded-2xl bg-admin-gold px-5 py-3 font-bold text-admin-dark transition hover:bg-admin-green;
+}

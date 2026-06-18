@@ -1,0 +1,186 @@
+SMART CAFE AI - BACKEND WORKFLOW EXPLANATION
+Hinglish me simple explanation: kaunsi file backend me kya kaam kar rahi hai.
+
+1) Overall Architecture
+- apps/web: Customer website hai. Isme homepage, menu, slot booking, about, contact aur chatbot UI hai.
+- apps/admin: Owner ka separate admin panel hai. Owner login karke bookings, orders, customers, chatbot conversations aur ML predictions dekh sakta hai.
+- apps/api: Main backend hai. Ye Express server, Prisma ORM, JWT security, MySQL connection, booking/order/chat APIs handle karta hai.
+- apps/ml: Machine learning demand predictor hai. Ye old booking data analyze karke future occupancy predictions MySQL me save karta hai.
+
+2) apps/api/src/server.ts
+- Backend server yahi start hota hai.
+- Express app ko HTTP server me convert karta hai.
+- Socket.IO attach karta hai real-time chat/admin events ke liye.
+- PORT env file se aata hai. Default 4000 hai.
+- Jab customer socket se message bhejta hai, ye handleChat function call karta hai aur AI reply return karta hai.
+
+3) apps/api/src/app.ts
+- Express app configuration yahi hoti hai.
+- helmet security headers lagata hai.
+- cors allow karta hai customer website aur admin dashboard ko backend access karne ke liye.
+- express.json request body read karta hai.
+- rateLimit API abuse ko control karta hai.
+- /health endpoint backend health check ke liye hai.
+- /api customer/public routes hai.
+- /api/admin protected admin routes hai.
+- Error handling last me connect hoti hai.
+
+4) apps/api/src/lib/env.ts
+- .env file read karta hai.
+- Zod se env variables validate karta hai.
+- DATABASE_URL, JWT_SECRET, CLIENT_URL, ADMIN_URL, GEMINI_API_KEY yahi se safely access hote hain.
+- Agar important env missing ho to backend clear error deta hai.
+
+5) apps/api/src/lib/prisma.ts
+- PrismaClient create karta hai.
+- Ye MySQL database se baat karne ka main object hai.
+- Backend me jahan bhi booking/order/customer data chahiye, prisma object use hota hai.
+
+6) apps/api/prisma/schema.prisma
+- Ye database ka blueprint hai.
+- Tables/models:
+  - Admin: owner login data.
+  - Customer: customer name, email, phone.
+  - MenuItem: cafe menu items, price, tags, sweetness, temperature.
+  - Booking: table bookings.
+  - Order: customer orders.
+  - OrderItem: order ke andar ka item and quantity.
+  - Conversation: AI chatbot conversation record.
+  - Message: user aur assistant messages.
+  - DemandPrediction: ML model predictions.
+  - ContactMessage: contact page messages.
+- Relations define hain, jaise Customer ke multiple bookings/orders ho sakte hain.
+
+7) apps/api/prisma/seed.ts
+- First-time data insert karta hai.
+- Default owner admin create karta hai:
+  Email: owner@smartcafe.ai
+  Password: Owner@12345
+- Starting menu items insert/update karta hai.
+- Isko pnpm db:seed se run karte hain.
+
+8) apps/api/src/middleware/auth.ts
+- Admin security handle karta hai.
+- signAdminToken JWT token banata hai after login.
+- requireAdmin middleware protected routes ko secure karta hai.
+- Admin panel ke API call me Authorization: Bearer token hona zaroori hai.
+
+9) apps/api/src/middleware/error.ts
+- Agar validation error, route error, ya backend error aaye, ye clean JSON response deta hai.
+- Zod validation error ko 400 response me convert karta hai.
+- Unknown error ko 500 internal server error banata hai.
+
+10) apps/api/src/services/customer.service.ts
+- Customer duplicate na bane isliye ye email/phone se existing customer dhundta hai.
+- Agar customer mil gaya to update karta hai.
+- Agar nahi mila to new customer create karta hai.
+- Booking, order aur chat me same function use hota hai.
+
+11) apps/api/src/services/chat.service.ts
+- Ye chatbot ka brain hai.
+- Customer demand read karta hai, jaise: "I want cold and sweet".
+- MenuItem table se available menu fetch karta hai.
+- Local recommender tags, sweetness, temperature ke basis par 2-3 best items choose karta hai.
+- Agar GEMINI_API_KEY hai to Gemini API se natural bilingual reply generate hota hai.
+- Agar Gemini key nahi hai, tab bhi chatbot local recommendation se fully working reply deta hai.
+- Reply English + Hindi/Hinglish dono me aata hai.
+- Conversation aur messages MySQL me save hote hain so owner admin panel me track kar sake.
+
+12) apps/api/src/routes/public.routes.ts
+Customer website ke APIs:
+- GET /api/menu
+  Menu page ke liye all available menu items return karta hai.
+- POST /api/bookings
+  Customer details + date + slot + guests save karta hai.
+- POST /api/orders
+  Customer order, order items aur total amount save karta hai.
+- POST /api/contact
+  Contact form message save karta hai.
+- POST /api/chat
+  Chatbot message process karta hai, recommendations deta hai, conversation save karta hai.
+
+13) apps/api/src/routes/admin.routes.ts
+Admin dashboard ke protected APIs:
+- POST /api/admin/login
+  Owner email/password verify karta hai aur JWT token deta hai.
+- GET /api/admin/me
+  Logged-in admin details return karta hai.
+- GET /api/admin/overview
+  Total bookings, orders, customers, revenue, conversations, latest data, predictions return karta hai.
+- GET /api/admin/bookings
+  Saari bookings list karta hai.
+- PATCH /api/admin/bookings/:id/status
+  Owner booking status update kar sakta hai.
+- GET /api/admin/orders
+  Saare orders list karta hai.
+- PATCH /api/admin/orders/:id/status
+  Owner order status update kar sakta hai.
+- GET /api/admin/customers
+  All customers plus booking/order/chat counts return karta hai.
+- GET /api/admin/conversations
+  Chatbot ki saari tracked conversations show karta hai.
+- GET /api/admin/predictions
+  ML demand predictor ke future forecasts return karta hai.
+- GET /api/admin/contacts
+  Contact page se aaye messages return karta hai.
+
+14) Data Flow - Booking
+- Customer website par booking form fill karta hai.
+- apps/web POST /api/bookings call karta hai.
+- Backend findOrCreateCustomer run karta hai.
+- Booking MySQL me save hoti hai.
+- Admin panel /bookings page par owner booking dekh sakta hai.
+
+15) Data Flow - Order
+- Customer menu page se items cart me add karta hai.
+- apps/web POST /api/orders call karta hai.
+- Backend customer create/find karta hai.
+- Menu item price DB se verify hoti hai, frontend price par trust nahi kiya jata.
+- Order and OrderItem MySQL me save hota hai.
+- Admin panel /orders page par order status update ho sakta hai.
+
+16) Data Flow - Chatbot
+- Customer chatbot me demand likhta hai.
+- Frontend POST /api/chat call karta hai.
+- Backend menu fetch karta hai.
+- Recommendation engine best menu items choose karta hai.
+- Gemini available ho to AI polished bilingual answer generate karta hai.
+- User message and assistant answer Conversation/Message tables me save hote hain.
+- Owner admin /conversations page par complete chat history dekh sakta hai.
+
+17) Data Flow - ML Demand Predictor
+- apps/ml/train_predict.py Booking table se past booking data read karta hai.
+- Features banata hai: day_of_week, month, weekend, rolling average.
+- XGBoost model train karta hai; agar xgboost available nahi ho to RandomForest fallback use hota hai.
+- Future 14 days ki guest demand predict karta hai.
+- Occupancy percentage calculate karta hai using CAFE_TOTAL_SEATS.
+- DemandPrediction table me predictions save/update karta hai.
+- Admin panel /predictions page par owner dekhta hai e.g. Friday 90% occupancy.
+
+18) apps/ml/scheduler.py
+- Ye automatic weekly retraining handle karta hai.
+- Script start hote hi ek baar train_predict run karta hai.
+- Fir har Monday 02:00 AM model retrain karta hai.
+- Fresh predictions MySQL me save karta hai.
+
+19) Security Points
+- Admin APIs JWT protected hain.
+- Password bcrypt hashing se save hota hai, plain text password database me nahi jata.
+- Helmet headers backend security improve karte hain.
+- Rate limiting abuse reduce karta hai.
+- Frontend price par backend trust nahi karta; order total DB price se calculate hota hai.
+- Environment variables .env me rakhe gaye hain.
+
+20) Run Workflow
+- docker compose up -d mysql
+- pnpm install
+- cp apps/api/.env.example apps/api/.env
+- pnpm db:generate
+- pnpm db:migrate
+- pnpm db:seed
+- pnpm dev
+- Public site: http://localhost:3000
+- Admin panel: http://localhost:3001
+- API: http://localhost:4000
+- ML once: cd apps/ml && python train_predict.py
+- ML weekly: cd apps/ml && python scheduler.py

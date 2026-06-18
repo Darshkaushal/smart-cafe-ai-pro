@@ -1,0 +1,22 @@
+{
+  "name": "smart-cafe-ai-pro",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "dev": "turbo dev",
+    "dev:api": "pnpm --filter @smart-cafe/api dev",
+    "dev:web": "pnpm --filter @smart-cafe/web dev",
+    "dev:admin": "pnpm --filter @smart-cafe/admin dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "db:generate": "pnpm --filter @smart-cafe/api prisma:generate",
+    "db:migrate": "pnpm --filter @smart-cafe/api prisma:migrate",
+    "db:seed": "pnpm --filter @smart-cafe/api prisma:seed",
+    "ml:train": "cd apps/ml && python train_predict.py"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3"
+  }
+}
