@@ -52,7 +52,7 @@ export function MenuOrder({ items }: { items: MenuItem[] }) {
 
   async function orderNow() {
     if (!cartItems.length) return setStatus({ type: "error", message: "Add at least one item to your cart." });
-    if (!customer.name || !customer.email || !customer.phone) return setStatus({ type: "error", message: "Enter name, email, and phone for order tracking." });
+    if (!customer.name || !customer.email || !customer.phone) return setStatus({ type: "error", message: "Enter name, email, and phone to place your order." });
     setStatus({ type: "loading", message: "Placing your order..." });
     try {
       await postJson("/orders", {
@@ -61,7 +61,7 @@ export function MenuOrder({ items }: { items: MenuItem[] }) {
         items: cartItems.map((item) => ({ menuItemId: item.id, quantity: cart[item.id] }))
       });
       setCart({});
-      setStatus({ type: "success", message: "Order placed successfully. Owner can see it inside admin panel." });
+      setStatus({ type: "success", message: "Order placed successfully. Your cafe favourites are getting ready." });
     } catch (error) {
       setStatus({ type: "error", message: error instanceof Error ? error.message : "Order failed." });
     }

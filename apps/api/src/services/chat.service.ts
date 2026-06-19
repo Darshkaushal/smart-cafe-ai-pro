@@ -84,7 +84,7 @@ function buildReason(item: MenuItem, normalized: string) {
   if (item.temperature === "cold" && /cold|thanda|ठंडा/i.test(normalized)) reasons.push("it is chilled and refreshing");
   if (item.sweetness >= 4 && /sweet|meetha|mitha|मीठा/i.test(normalized)) reasons.push("it has a strong sweet taste");
   if (/coffee/i.test(normalized) && item.name.toLowerCase().includes("coffee")) reasons.push("it matches your coffee mood");
-  if (!reasons.length) reasons.push("it matches your cafe vibe and popular taste preferences");
+  if (!reasons.length) reasons.push("it matches DK's Cafe vibe and popular taste preferences");
   return reasons.join(", ");
 }
 
@@ -99,23 +99,23 @@ function fallbackAnswer(recommendations: Recommendation[]) {
     .map((rec, index) => `${index + 1}. ${rec.name} — ₹${rec.price}: ${rec.reason}.`)
     .join("\n");
   const hindi = recommendations
-    .map((rec, index) => `${index + 1}. ${rec.name} — ₹${rec.price}: Ye aapki demand ke according best match hai, taste balanced aur cafe favorite option hai.`)
+    .map((rec, index) => `${index + 1}. ${rec.name} — ₹${rec.price}: Ye aapki demand ke according best match hai, taste balanced aur DK's Cafe favorite option hai.`)
     .join("\n");
 
-  return `Here are the best drinks for you:\n${english}\n\nHindi:\nAapke liye best options:\n${hindi}\n\nTip: Agar aap aur zyada sweet ya less sweet chahte ho, order notes me mention kar sakte ho.`;
+  return `Here are the best DK's Cafe picks for you:\n${english}\n\nHindi:\nAapke liye best options:\n${hindi}\n\nTip: Agar aap aur zyada sweet ya less sweet chahte ho, order notes me mention kar sakte ho.`;
 }
 
 async function geminiAnswer(message: string, menu: MenuItem[], recommendations: Recommendation[], language: string) {
   if (!ai) return fallbackAnswer(recommendations);
 
-  const prompt = `You are Smart Cafe AI, a friendly drink recommender for a modern Gen-Z cafe.
+  const prompt = `You are DK's Cafe Sip Guide, a friendly drink recommender for a modern Jaipur cafe.
 Customer language detected: ${language}.
 Customer demand: "${message}"
 
 Available menu:
 ${menuForPrompt(menu)}
 
-Recommended items already selected from the database:
+Recommended items already selected from the menu:
 ${recommendations.map((rec) => `- ${rec.name} ₹${rec.price}: ${rec.reason}`).join("\n")}
 
 Rules:

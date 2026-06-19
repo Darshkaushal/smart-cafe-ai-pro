@@ -7,7 +7,7 @@ import { getAdminApiUrl, saveToken } from "@/lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("owner@smartcafe.ai");
+  const [email, setEmail] = useState("owner@dkscafe.in");
   const [password, setPassword] = useState("Owner@12345");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -42,14 +42,14 @@ export default function LoginPage() {
         <div>
           <p className="text-admin-gold">Protected owner area</p>
           <h1 className="mt-2 text-4xl font-black">Admin Login</h1>
-          <p className="mt-2 text-sm text-white/50">Access bookings, orders, customers, AI conversations and demand predictions.</p>
+          <p className="mt-2 text-sm text-white/50">Access bookings, orders, customers, messages and preparation insights.</p>
         </div>
         <input className="admin-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <input className="admin-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         <button disabled={loading} className="admin-btn w-full"><LockKeyhole size={18} /> {loading ? "Logging in..." : "Login"}</button>
         {error && <p className="rounded-2xl bg-red-500/10 p-3 text-sm text-red-200">{error}</p>}
         <div className="rounded-2xl border border-admin-line bg-white/[0.035] p-3 text-xs text-white/45">
-          Demo login: owner@smartcafe.ai / Owner@12345
+          Owner login: owner@dkscafe.in / Owner@12345
         </div>
       </form>
     </main>

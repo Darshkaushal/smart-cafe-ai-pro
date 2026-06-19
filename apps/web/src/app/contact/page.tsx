@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Mail, MapPin, Phone } from "lucide-react";
+import { CheckCircle2, Clock, Mail, MapPin, Phone } from "lucide-react";
 import { postJson } from "@/lib/api";
 
 const contactItems = [
-  { icon: Mail, title: "Email", text: "hello@smartcafe.ai" },
+  { icon: Mail, title: "Email", text: "hello@dkscafe.in" },
   { icon: Phone, title: "Phone", text: "+91 98765 43210" },
-  { icon: MapPin, title: "Location", text: "Smart Cafe AI, City Center" }
+  { icon: Clock, title: "Hours", text: "Open daily · 10:00 AM - 11:00 PM" },
+  { icon: MapPin, title: "Location", text: "DK's Cafe, Jaipur, Rajasthan" }
 ];
 
 export default function ContactPage() {
@@ -16,10 +17,10 @@ export default function ContactPage() {
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus({ type: "loading", message: "Sending..." });
+    setStatus({ type: "loading", message: "Sending your message..." });
     try {
       await postJson("/contact", form);
-      setStatus({ type: "success", message: "Message sent. Owner can read it in admin panel." });
+      setStatus({ type: "success", message: "Message sent. Our team will contact you soon." });
       setForm({ name: "", email: "", phone: "", subject: "", message: "" });
     } catch (error) {
       setStatus({ type: "error", message: error instanceof Error ? error.message : "Contact request failed." });
@@ -30,14 +31,14 @@ export default function ContactPage() {
     <main className="px-5 py-16">
       <div className="page-shell">
         <div className="mx-auto mb-10 max-w-4xl text-center">
-          <p className="section-label mx-auto">Contact us</p>
+          <p className="section-label mx-auto">Visit us</p>
           <h1 className="section-heading mx-auto">Questions, events, birthdays, bulk orders.</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-white/60">Send a request and it will be stored securely for the owner to view inside the admin panel.</p>
+          <p className="mx-auto mt-5 max-w-2xl text-white/60">Send us your plan and we&apos;ll help you with table setup, timing, menu suggestions and celebration details.</p>
         </div>
 
         <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[0.85fr_1.15fr]">
           <div className="premium-card p-6">
-            <div className="relative space-y-4">
+            <div className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
               {contactItems.map(({ icon: Icon, title, text }) => (
                 <div key={title} className="rounded-3xl border border-white/10 bg-black/20 p-5">
                   <Icon className="text-cafe-caramel" />

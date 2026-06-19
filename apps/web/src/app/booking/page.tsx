@@ -6,8 +6,8 @@ export default function BookingPage() {
       <div className="page-shell">
         <div className="mx-auto mb-10 max-w-4xl text-center">
           <p className="section-label mx-auto">Table reservation</p>
-          <h1 className="section-heading mx-auto">Book your cafe slot with a smoother reservation flow.</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-white/60">All bookings are stored securely in MySQL and visible only to the owner through the protected admin panel.</p>
+          <h1 className="section-heading mx-auto">Reserve your corner for coffee, conversations and celebrations.</h1>
+          <p className="mx-auto mt-5 max-w-2xl text-white/60">Choose your date, time, guest count and vibe notes. We&apos;ll keep your table ready at DK&apos;s Cafe, Jaipur.</p>
         </div>
         <BookingForm />
       </div>

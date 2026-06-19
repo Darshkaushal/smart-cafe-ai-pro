@@ -1,12 +1,12 @@
-import { Bot, Database, LayoutDashboard, LineChart, LockKeyhole, Smartphone } from "lucide-react";
+import { CakeSlice, Coffee, Heart, MapPin, Music2, Sparkles } from "lucide-react";
 
 const cards = [
-  [Smartphone, "Customer Experience", "Responsive Gen-Z design with menu, order, booking, contact, and AI chat."],
-  [LayoutDashboard, "Owner Control", "Separate admin dashboard to track orders, bookings, customers, conversations, and demand."],
-  [Bot, "AI Drink Assistant", "Gemini-ready recommendations plus fallback menu matching in English and Hindi."],
-  [LineChart, "ML Forecasts", "Python model predicts future occupancy and writes forecasts back into MySQL."],
-  [Database, "MySQL Storage", "Bookings, orders, customers, contact forms and conversations are persisted securely."],
-  [LockKeyhole, "Protected Admin", "Owner dashboard uses JWT authentication and private API endpoints."]
+  [Coffee, "Specialty coffee", "Creamy cold coffees, warm brews, frappes and refreshers crafted for everyday cravings."],
+  [CakeSlice, "Dessert dates", "Sweet plates, brownie pairings and birthday-friendly table notes for small celebrations."],
+  [Music2, "Soft ambience", "Warm lighting, calm playlists and a cozy layout for friends, dates and study breaks."],
+  [Heart, "Made for moments", "A place for first meetings, casual catchups, late-evening talks and solo coffee time."],
+  [Sparkles, "Gen-Z aesthetic", "Clean visuals, smooth ordering and a modern cafe mood from first click to first sip."],
+  [MapPin, "Jaipur, Rajasthan", "Rooted in Jaipur with a local vibe, easy reservations and quick pickup-friendly service."]
 ] as const;
 
 export default function AboutPage() {
@@ -15,10 +15,10 @@ export default function AboutPage() {
       <section className="page-shell">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <div>
-            <p className="section-label">About Smart Cafe AI</p>
-            <h1 className="section-heading">A modern cafe operating system built for customers and owners.</h1>
+            <p className="section-label">About DK&apos;s Cafe</p>
+            <h1 className="section-heading">Aesthetic coffee, warm corners and Jaipur&apos;s sweetest little escape.</h1>
           </div>
-          <p className="text-lg leading-8 text-white/58">This project is designed like a professional full-stack product: polished UI, secure backend, database persistence, AI recommendations, admin analytics, and demand prediction.</p>
+          <p className="text-lg leading-8 text-white/58">DK&apos;s Cafe is designed for real moments: cold coffee after class, date-night desserts, birthday tables, work breaks and chill evening plans with friends.</p>
         </div>
 
         <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">

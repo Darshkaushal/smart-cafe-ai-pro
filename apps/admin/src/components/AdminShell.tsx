@@ -29,14 +29,14 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         <div className="flex items-center justify-between lg:block">
           <Link href="/" className="flex items-center gap-3">
             <span className="grid h-12 w-12 place-items-center rounded-2xl bg-admin-gold text-admin-dark"><Sparkles /></span>
-            <span className="text-xl font-black">SmartCafe <span className="text-admin-gold">Owner</span></span>
+            <span className="text-xl font-black">DK&apos;s <span className="text-admin-gold">Cafe</span></span>
           </Link>
           <button onClick={logout} className="grid h-11 w-11 place-items-center rounded-2xl border border-admin-line bg-white/5 text-white/60 lg:hidden"><LogOut size={18} /></button>
         </div>
 
         <div className="mt-6 hidden rounded-3xl border border-admin-line bg-white/[0.035] p-4 lg:block">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/35">Control center</p>
-          <p className="mt-2 text-sm leading-6 text-white/55">Track bookings, orders, customer data, AI conversations and ML predictions from one dashboard.</p>
+          <p className="mt-2 text-sm leading-6 text-white/55">Private control room for reservations, orders, customers, cafe messages and preparation insights.</p>
         </div>
 
         <nav className="mt-5 flex gap-2 overflow-x-auto pb-1 lg:grid lg:gap-2 lg:overflow-visible lg:pb-0">

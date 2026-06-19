@@ -14,7 +14,7 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  socket.emit("connected", { message: "Smart Cafe AI socket connected." });
+  socket.emit("connected", { message: "DK's Cafe socket connected." });
 
   socket.on("chat:message", async (payload: { message: string; name?: string; email?: string; phone?: string }) => {
     try {
@@ -29,5 +29,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(env.PORT, () => {
-  console.log(`Smart Cafe API running on http://localhost:${env.PORT}`);
+  console.log(`DK's Cafe API running on http://localhost:${env.PORT}`);
 });

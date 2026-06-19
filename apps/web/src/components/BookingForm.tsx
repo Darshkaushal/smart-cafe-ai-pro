@@ -26,7 +26,7 @@ export function BookingForm() {
         guests: Number(form.guests),
         notes: form.notes
       });
-      setStatus({ type: "success", message: "Slot booked successfully. Owner can now see it in admin dashboard." });
+      setStatus({ type: "success", message: "Your table is reserved. See you soon at DK's Cafe Jaipur." });
       setForm({ name: "", email: "", phone: "", date: "", timeSlot: slots[4], guests: "2", notes: "" });
     } catch (error) {
       setStatus({ type: "error", message: error instanceof Error ? error.message : "Booking failed." });
@@ -38,12 +38,12 @@ export function BookingForm() {
       <div className="relative grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
         <div className="rounded-[1.7rem] bg-gradient-to-br from-cafe-caramel/20 to-white/[0.04] p-6">
           <div className="flex items-center gap-3 text-3xl font-black text-white"><CalendarCheck className="text-cafe-caramel" /> Reserve Your Vibe</div>
-          <p className="mt-4 text-sm leading-6 text-white/58">Choose your date, time, guests, and vibe. The booking goes directly to MySQL and appears in the owner admin panel.</p>
+          <p className="mt-4 text-sm leading-6 text-white/58">Choose your date, time, guests and mood. Add notes for birthdays, window seats, quiet corners or special requests.</p>
           <div className="mt-8 grid gap-3">
             {[
-              ["Secure", "Stored in MySQL"],
-              ["Live", "Visible in admin"],
-              ["Smart", "Used by ML predictor"]
+              ["Cozy", "Warm tables and soft lights"],
+              ["Flexible", "Birthday, date or work vibe"],
+              ["Quick", "Simple reservation flow"]
             ].map(([title, text]) => (
               <div key={title} className="rounded-3xl border border-white/10 bg-black/20 p-4">
                 <p className="font-black text-white">{title}</p>

@@ -1,12 +1,12 @@
-# Smart Cafe AI Pro
+# DK's Cafe Pro
 
-A professional full-stack Smart Cafe AI platform with:
+A professional full-stack DK's Cafe platform with:
 
 - Public Gen-Z responsive website: homepage, menu, slot booking, about, contact.
 - Separate owner/admin dashboard for bookings, orders, customers, conversations, and ML predictions.
 - Secure MySQL persistence using Prisma ORM.
 - Gen AI drink chatbot that recommends 2–3 menu items in English and Hindi and stores every conversation.
-- Machine learning demand predictor that trains from booking data and writes demand forecasts back into MySQL.
+- Demand planning predictor that trains from booking data and writes demand forecasts back into MySQL.
 
 ## Folder structure
 
@@ -16,7 +16,7 @@ smart-cafe-ai-pro/
     web/       Customer website
     admin/     Separate owner dashboard
     api/       Express + Prisma + Socket.IO backend
-    ml/        Python ML demand predictor and weekly scheduler
+    ml/        Python demand planning predictor and weekly scheduler
   step.txt     Backend workflow explanation in Hinglish
 ```
 
@@ -50,7 +50,7 @@ cp apps/api/.env.example apps/api/.env
 Default local admin login after seed:
 
 ```txt
-Email: owner@smartcafe.ai
+Email: owner@dkscafe.in
 Password: Owner@12345
 ```
 

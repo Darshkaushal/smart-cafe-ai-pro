@@ -5,8 +5,8 @@ import { Footer } from "@/components/Footer";
 import { ChatWidget } from "@/components/ChatWidget";
 
 export const metadata: Metadata = {
-  title: "Smart Cafe AI",
-  description: "Gen-Z cafe website with booking, ordering, AI drink chatbot, and demand prediction."
+  title: "DK's Cafe Jaipur",
+  description: "A warm, aesthetic Jaipur cafe for specialty coffee, dessert dates, quick orders, and table reservations."
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

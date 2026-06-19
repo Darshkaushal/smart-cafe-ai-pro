@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Bot, ChevronDown, Send, Sparkles, Wand2 } from "lucide-react";
+import { ChevronDown, Coffee, Send, Sparkles, Wand2 } from "lucide-react";
 import { postJson } from "@/lib/api";
 
 type ChatResponse = {
@@ -14,8 +14,8 @@ const prompts = ["cold and sweet", "chocolate shake", "refreshing mango", "less 
 export function ChatWidget() {
   const [open, setOpen] = useState(true);
   const [message, setMessage] = useState("I want cold and sweet");
-  const [history, setHistory] = useState<Array<{ role: "user" | "ai"; text: string }>>([
-    { role: "ai", text: "Hi! Tell me your mood: cold, sweet, coffee, chocolate, spicy, refreshing... I will suggest 2–3 best cafe items in English + Hindi." }
+  const [history, setHistory] = useState<Array<{ role: "user" | "assistant"; text: string }>>([
+    { role: "assistant", text: "Hi! Tell me your mood: cold, sweet, coffee, chocolate, spicy, refreshing... I will suggest 2–3 DK's Cafe picks in English + Hindi." }
   ]);
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -32,9 +32,9 @@ export function ChatWidget() {
     setLoading(true);
     try {
       const data = await postJson<ChatResponse>("/chat", { message: current });
-      setHistory((h) => [...h, { role: "ai", text: data.answer }]);
+      setHistory((h) => [...h, { role: "assistant", text: data.answer }]);
     } catch (error) {
-      setHistory((h) => [...h, { role: "ai", text: error instanceof Error ? error.message : "Chat failed." }]);
+      setHistory((h) => [...h, { role: "assistant", text: error instanceof Error ? error.message : "Recommendation failed. Please try again." }]);
     } finally {
       setLoading(false);
     }
@@ -42,8 +42,8 @@ export function ChatWidget() {
 
   if (!open) {
     return (
-      <button onClick={() => setOpen(true)} className="fixed bottom-6 right-6 z-50 grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-cafe-caramel to-cafe-neon text-cafe-dark shadow-glow transition hover:-translate-y-1">
-        <Bot />
+      <button onClick={() => setOpen(true)} className="fixed bottom-6 right-6 z-50 grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-cafe-caramel to-cafe-neon text-cafe-dark shadow-glow transition hover:-translate-y-1" aria-label="Open sip guide">
+        <Coffee />
       </button>
     );
   }
@@ -54,11 +54,11 @@ export function ChatWidget() {
         <div className="flex items-center gap-3">
           <div className="grid h-11 w-11 place-items-center rounded-2xl bg-cafe-caramel text-cafe-dark"><Sparkles /></div>
           <div>
-            <p className="font-black text-white">Drink AI</p>
-            <p className="text-xs text-white/45">English + Hindi menu assistant</p>
+            <p className="font-black text-white">Sip Guide</p>
+            <p className="text-xs text-white/45">English + Hindi menu helper</p>
           </div>
         </div>
-        <button onClick={() => setOpen(false)} className="grid h-10 w-10 place-items-center rounded-full bg-white/5 text-white/50 hover:text-white"><ChevronDown size={18} /></button>
+        <button onClick={() => setOpen(false)} className="grid h-10 w-10 place-items-center rounded-full bg-white/5 text-white/50 hover:text-white" aria-label="Close sip guide"><ChevronDown size={18} /></button>
       </div>
 
       <div className="max-h-96 space-y-3 overflow-y-auto p-4">
@@ -69,7 +69,7 @@ export function ChatWidget() {
         ))}
         {loading && (
           <div className="mr-16 flex items-center gap-2 rounded-3xl border border-white/10 bg-white/[0.07] px-4 py-3 text-sm text-white/55">
-            <Wand2 size={16} className="text-cafe-caramel" /> AI is selecting best drinks...
+            <Wand2 size={16} className="text-cafe-caramel" /> Picking the best DK&apos;s Cafe matches...
           </div>
         )}
         <div ref={bottomRef} />
@@ -91,7 +91,7 @@ export function ChatWidget() {
             className="input-field"
             placeholder="I want cold and sweet..."
           />
-          <button onClick={() => sendMessage()} disabled={loading} className="grid w-14 place-items-center rounded-2xl bg-cafe-caramel text-cafe-dark disabled:opacity-60"><Send size={18} /></button>
+          <button onClick={() => sendMessage()} disabled={loading} className="grid w-14 place-items-center rounded-2xl bg-cafe-caramel text-cafe-dark disabled:opacity-60" aria-label="Send message"><Send size={18} /></button>
         </div>
       </div>
     </div>

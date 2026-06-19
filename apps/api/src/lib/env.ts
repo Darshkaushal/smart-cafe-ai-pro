@@ -11,7 +11,7 @@ const envSchema = z.object({
   CLIENT_URL: z.string().url().default("http://localhost:3000"),
   ADMIN_URL: z.string().url().default("http://localhost:3001"),
   GEMINI_API_KEY: z.string().optional().default(""),
-  EMAIL_FROM: z.string().optional().default("Smart Cafe AI <no-reply@smartcafe.ai>"),
+  EMAIL_FROM: z.string().optional().default("DK's Cafe <no-reply@dkscafe.in>"),
   SMTP_HOST: z.string().optional().default(""),
   SMTP_PORT: z.coerce.number().optional().default(587),
   SMTP_USER: z.string().optional().default(""),

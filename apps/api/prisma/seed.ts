@@ -109,9 +109,9 @@ async function main() {
   const passwordHash = await bcrypt.hash("Owner@12345", 12);
 
   await prisma.admin.upsert({
-    where: { email: "owner@smartcafe.ai" },
-    update: { name: "Smart Cafe Owner", passwordHash },
-    create: { name: "Smart Cafe Owner", email: "owner@smartcafe.ai", passwordHash }
+    where: { email: "owner@dkscafe.in" },
+    update: { name: "DK's Cafe Owner", passwordHash },
+    create: { name: "DK's Cafe Owner", email: "owner@dkscafe.in", passwordHash }
   });
 
   for (const item of menuItems) {
