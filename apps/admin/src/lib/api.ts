@@ -1,4 +1,16 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+export function getAdminApiUrl() {
+  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+
+  if (typeof window !== "undefined") {
+    const { protocol, hostname } = window.location;
+    if (hostname.includes("-3001.app.github.dev")) return `${protocol}//${hostname.replace("-3001.", "-4000.")}/api`;
+    if (hostname.includes("-3000.app.github.dev")) return `${protocol}//${hostname.replace("-3000.", "-4000.")}/api`;
+  }
+
+  return "http://localhost:4000/api";
+}
+
+export const API_URL = getAdminApiUrl();
 
 export function getToken() {
   if (typeof window === "undefined") return "";
@@ -14,7 +26,7 @@ export function clearToken() {
 }
 
 export async function apiFetch<T>(path: string, init: RequestInit = {}) {
-  const response = await fetch(`${API_URL}${path}`, {
+  const response = await fetch(`${getAdminApiUrl()}${path}`, {
     ...init,
     headers: {
       "Content-Type": "application/json",
@@ -22,7 +34,7 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}) {
       ...(init.headers || {})
     }
   });
-  const json = await response.json();
-  if (!response.ok || !json.success) throw new Error(json.message || "Request failed");
+  const json = await response.json().catch(() => ({}));
+  if (!response.ok || !json.success) throw new Error(json.message || "Request failed. Check backend API on port 4000.");
   return json.data as T;
 }
