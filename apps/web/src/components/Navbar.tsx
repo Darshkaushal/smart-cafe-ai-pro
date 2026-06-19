@@ -9,6 +9,8 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/menu", label: "Menu" },
   { href: "/booking", label: "Reserve" },
+  { href: "/gallery", label: "Gallery" },
+  { href: "/events", label: "Events" },
   { href: "/about", label: "Story" },
   { href: "/contact", label: "Visit" }
 ];
@@ -38,7 +40,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition ${active ? "bg-cafe-caramel text-cafe-dark" : "text-white/65 hover:bg-white/10 hover:text-white"}`}
+                className={`rounded-full px-3 py-2 text-sm font-semibold transition ${active ? "bg-cafe-caramel text-cafe-dark" : "text-white/65 hover:bg-white/10 hover:text-white"}`}
               >
                 {link.label}
               </Link>

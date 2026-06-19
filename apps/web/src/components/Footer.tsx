@@ -14,6 +14,8 @@ export function Footer() {
           <div className="mt-3 grid gap-2 text-sm text-white/55">
             <Link href="/menu" className="hover:text-cafe-caramel">Menu</Link>
             <Link href="/booking" className="hover:text-cafe-caramel">Reserve</Link>
+            <Link href="/gallery" className="hover:text-cafe-caramel">Gallery</Link>
+            <Link href="/events" className="hover:text-cafe-caramel">Events</Link>
             <Link href="/contact" className="hover:text-cafe-caramel">Visit</Link>
           </div>
         </div>

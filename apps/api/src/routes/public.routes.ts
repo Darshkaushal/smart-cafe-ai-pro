@@ -112,7 +112,11 @@ publicRouter.post("/chat", async (req, res, next) => {
       message: z.string().min(2),
       name: z.string().optional(),
       email: z.string().email().optional().or(z.literal("")),
-      phone: z.string().optional().or(z.literal(""))
+      phone: z.string().optional().or(z.literal("")),
+      history: z.array(z.object({
+        role: z.enum(["user", "assistant"]),
+        content: z.string().min(1).max(4000)
+      })).max(12).optional()
     }).parse(req.body);
 
     const result = await handleChat(body);
