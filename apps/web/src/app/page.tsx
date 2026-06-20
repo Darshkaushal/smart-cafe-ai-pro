@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, CakeSlice, Coffee, Heart, MapPin, Music2, Sparkles, Star, Timer, Utensils } from "lucide-react";
+import { CafeMotionScene } from "@/components/CafeMotionScene";
 
 const experiences = [
   { icon: Coffee, title: "Signature sips", text: "Cold coffee clouds, berry frappes, hot brews, coolers and dessert-style drinks made for every mood." },
@@ -8,7 +9,13 @@ const experiences = [
   { icon: MapPin, title: "Jaipur heart", text: "A fresh cafe stop in Jaipur, Rajasthan with dine-in, quick pickup and pre-booked tables." }
 ];
 
-const flow = ["Pick your mood", "Choose a signature item", "Reserve your table", "Enjoy the Jaipur cafe vibe"];
+const flow = ["Check the vibe", "Pick a signature item", "Reserve your table", "Track your order"];
+
+const reviews = [
+  ["Aesthetic ambience, smooth coffee and the birthday table setup felt premium.", "Aarav S.", "Birthday table"],
+  ["The cold coffee options feel very Jaipur evening friendly. Quick order was easy.", "Megha R.", "Coffee date"],
+  ["Good place for laptop work and dessert breaks. Calm playlist and cozy corners.", "Kabir J.", "Study session"]
+];
 
 export default function HomePage() {
   return (
@@ -16,21 +23,22 @@ export default function HomePage() {
       <section className="relative px-5 py-16 md:py-24">
         <div className="absolute left-[-6rem] top-20 h-80 w-80 rounded-full bg-cafe-caramel/20 blur-3xl pulse-soft" />
         <div className="absolute right-[-8rem] top-40 h-96 w-96 rounded-full bg-cafe-neon/10 blur-3xl" />
-        <div className="page-shell relative grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="page-shell relative grid items-center gap-12 lg:grid-cols-[1.02fr_0.98fr]">
           <div>
             <p className="section-label"><Sparkles size={16} /> Jaipur&apos;s aesthetic sip spot</p>
             <h1 className="mt-6 max-w-5xl text-5xl font-black leading-[0.9] tracking-[-0.055em] text-white md:text-7xl xl:text-8xl">
-              Where coffee dates, study breaks and sweet cravings feel cinematic.
+              Coffee dates, birthday tables and late evening cravings — all in one cozy place.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/62">
-              Welcome to DK&apos;s Cafe — a warm, Gen-Z cafe in Jaipur, Rajasthan with signature cold coffees, creamy frappes, cozy tables and smooth online reservations.
+              Welcome to DK&apos;s Cafe — a modern Jaipur cafe with signature cold coffees, dessert jars, warm brews, event-friendly tables and a smooth digital ordering experience.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/menu" className="primary-btn">Explore Menu <ArrowRight size={18} /></Link>
               <Link href="/booking" className="secondary-btn">Reserve Table</Link>
+              <Link href="/offers" className="secondary-btn">See Offers</Link>
             </div>
             <div className="mt-10 grid max-w-2xl grid-cols-3 gap-3">
-              {[["Jaipur", "Rajasthan"], ["10 AM", "Daily opening"], ["2 min", "Easy booking"]].map(([value, label]) => (
+              {[["Jaipur", "Rajasthan"], ["10 AM", "Daily opening"], ["4.8/5", "Guest vibe"]].map(([value, label]) => (
                 <div key={label} className="rounded-3xl border border-white/10 bg-white/[0.05] p-4">
                   <p className="text-2xl font-black text-white md:text-3xl">{value}</p>
                   <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-white/45">{label}</p>
@@ -39,51 +47,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="relative min-h-[560px]">
-            <div className="premium-card float-slow absolute right-0 top-0 w-full max-w-[520px] p-5">
-              <div className="rounded-[1.7rem] bg-gradient-to-br from-cafe-caramel/35 via-white/5 to-cafe-neon/10 p-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-white/55">Today&apos;s mood</p>
-                    <h2 className="mt-1 text-3xl font-black text-white">Cold + Sweet</h2>
-                  </div>
-                  <div className="grid h-16 w-16 place-items-center rounded-3xl bg-cafe-caramel text-cafe-dark"><Coffee size={28} /></div>
-                </div>
-                <div className="mt-8 grid gap-3">
-                  {[
-                    ["Iced Caramel Cloud", "₹189", "Creamy best-seller"],
-                    ["Berry Blast Frappe", "₹219", "Sweet & chilled"],
-                    ["Mango Mint Cooler", "₹169", "Fresh Jaipur summer vibe"]
-                  ].map(([name, price, tag]) => (
-                    <div key={name} className="flex items-center justify-between rounded-3xl border border-white/10 bg-black/25 p-4">
-                      <div>
-                        <p className="font-black text-white">{name}</p>
-                        <p className="text-xs text-white/45">{tag}</p>
-                      </div>
-                      <p className="rounded-full bg-white/10 px-3 py-1 font-bold text-cafe-caramel">{price}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="premium-card absolute bottom-8 left-0 w-[82%] max-w-sm p-5">
-              <p className="text-sm text-white/55">Weekend table vibe</p>
-              <div className="mt-3 flex items-end gap-3">
-                <p className="text-6xl font-black text-cafe-neon">Fri</p>
-                <p className="pb-2 text-sm text-white/60">is perfect for cold coffee dates</p>
-              </div>
-              <div className="mt-5 h-3 overflow-hidden rounded-full bg-white/10"><div className="h-full w-[86%] rounded-full bg-gradient-to-r from-cafe-caramel to-cafe-neon" /></div>
-              <div className="mt-5 grid gap-2 text-sm text-white/65">
-                <p className="rounded-2xl bg-white/[0.06] p-3">Best time: 5 PM - 8 PM</p>
-                <p className="rounded-2xl bg-white/[0.06] p-3">Recommended: Caramel Cloud + Brownie</p>
-              </div>
-            </div>
-
-            <div className="absolute right-8 top-[470px] hidden rounded-full border border-white/10 bg-white/10 px-5 py-3 text-sm font-bold text-white/75 backdrop-blur-xl md:block">
-              <Star className="mr-2 inline text-cafe-caramel" size={16} /> Soft lights. Warm cups.
-            </div>
-          </div>
+          <CafeMotionScene />
         </div>
       </section>
 
@@ -106,8 +70,9 @@ export default function HomePage() {
       <section className="page-shell py-16">
         <div className="grid gap-8 rounded-[2.5rem] border border-white/10 bg-white/[0.045] p-6 md:p-10 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
-            <p className="section-label">Simple and smooth</p>
-            <h2 className="section-heading text-4xl md:text-5xl">From craving to cafe table in a few taps.</h2>
+            <p className="section-label">Cafe story</p>
+            <h2 className="section-heading text-4xl md:text-5xl">Built for the Jaipur crowd that loves taste, comfort and camera-ready corners.</h2>
+            <p className="mt-5 leading-7 text-white/55">DK&apos;s Cafe blends premium drinks, cozy seating, quick pickup and small-event hospitality. The public website feels like a real cafe brand, while the private owner side quietly supports operations.</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {flow.map((item, index) => (
@@ -117,6 +82,28 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="page-shell py-16">
+        <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div>
+            <p className="section-label">Loved by guests</p>
+            <h2 className="section-heading text-4xl md:text-5xl">Real cafe moments, smooth service and repeat-worthy taste.</h2>
+          </div>
+          <Link href="/reviews" className="secondary-btn">Read reviews <ArrowRight size={16} /></Link>
+        </div>
+        <div className="grid gap-5 md:grid-cols-3">
+          {reviews.map(([quote, name, tag]) => (
+            <article key={name} className="premium-card p-6">
+              <div className="relative">
+                <div className="mb-4 flex text-cafe-caramel">{[1,2,3,4,5].map((s) => <Star key={s} size={16} fill="currentColor" />)}</div>
+                <p className="leading-7 text-white/68">“{quote}”</p>
+                <p className="mt-5 font-black text-white">{name}</p>
+                <p className="text-sm text-cafe-caramel">{tag}</p>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 

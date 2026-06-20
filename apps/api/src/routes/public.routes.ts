@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
+import { BookingStatus } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
 import { ok, toNumber } from "../lib/http.js";
 import { findOrCreateCustomer } from "../services/customer.service.js";
@@ -17,6 +18,80 @@ publicRouter.get("/menu", async (_req, res, next) => {
   try {
     const items = await prisma.menuItem.findMany({ where: { isAvailable: true }, orderBy: { createdAt: "asc" } });
     ok(res, items.map((item) => ({ ...item, price: toNumber(item.price) })));
+  } catch (error) {
+    next(error);
+  }
+});
+
+publicRouter.get("/availability", async (req, res, next) => {
+  try {
+    const query = z.object({
+      date: z.string().min(10),
+      timeSlot: z.string().min(3),
+      guests: z.coerce.number().min(1).max(30).default(2)
+    }).parse(req.query);
+
+    const start = new Date(`${query.date}T00:00:00.000Z`);
+    const end = new Date(`${query.date}T23:59:59.999Z`);
+    const capacity = 40;
+
+    const bookings = await prisma.booking.findMany({
+      where: {
+        date: { gte: start, lte: end },
+        timeSlot: query.timeSlot,
+        status: { not: BookingStatus.CANCELLED }
+      },
+      select: { guests: true }
+    });
+
+    const reservedGuests = bookings.reduce((sum, booking) => sum + booking.guests, 0);
+    const availableSeats = Math.max(0, capacity - reservedGuests);
+
+    ok(res, {
+      date: query.date,
+      timeSlot: query.timeSlot,
+      requestedGuests: query.guests,
+      capacity,
+      reservedGuests,
+      availableSeats,
+      isAvailable: availableSeats >= query.guests
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+publicRouter.get("/orders/track", async (req, res, next) => {
+  try {
+    const query = z.object({
+      phone: z.string().min(4).optional(),
+      email: z.string().email().optional()
+    }).refine((value) => value.phone || value.email, { message: "Phone or email is required." }).parse(req.query);
+
+    const customers = await prisma.customer.findMany({
+      where: {
+        OR: [
+          ...(query.phone ? [{ phone: { contains: query.phone } }] : []),
+          ...(query.email ? [{ email: query.email.toLowerCase() }] : [])
+        ]
+      },
+      select: { id: true }
+    });
+
+    if (!customers.length) return ok(res, []);
+
+    const orders = await prisma.order.findMany({
+      where: { customerId: { in: customers.map((customer) => customer.id) } },
+      orderBy: { createdAt: "desc" },
+      take: 8,
+      include: { items: { include: { menuItem: true } } }
+    });
+
+    ok(res, orders.map((order) => ({
+      ...order,
+      totalAmount: toNumber(order.totalAmount),
+      items: order.items.map((item) => ({ ...item, price: toNumber(item.price), menuItem: { ...item.menuItem, price: toNumber(item.menuItem.price) } }))
+    })));
   } catch (error) {
     next(error);
   }

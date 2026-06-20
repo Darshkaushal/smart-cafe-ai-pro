@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { CheckCircle2, Minus, Plus, Search, ShoppingBag, Trash2 } from "lucide-react";
+import { CheckCircle2, CreditCard, Minus, Plus, Search, ShoppingBag, Trash2 } from "lucide-react";
 import type { MenuItem } from "@/lib/api";
 import { postJson } from "@/lib/api";
 
@@ -13,6 +13,8 @@ export function MenuOrder({ items }: { items: MenuItem[] }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [customer, setCustomer] = useState({ name: "", email: "", phone: "", pickupTime: "" });
+  const [paymentMode, setPaymentMode] = useState("UPI at counter");
+  const [orderCode, setOrderCode] = useState("");
   const [status, setStatus] = useState<{ type: "idle" | "loading" | "success" | "error"; message: string }>({ type: "idle", message: "" });
 
   const categories = useMemo(() => ["all", ...Array.from(new Set(items.map((item) => item.category)))], [items]);
@@ -55,13 +57,14 @@ export function MenuOrder({ items }: { items: MenuItem[] }) {
     if (!customer.name || !customer.email || !customer.phone) return setStatus({ type: "error", message: "Enter name, email, and phone to place your order." });
     setStatus({ type: "loading", message: "Placing your order..." });
     try {
-      await postJson("/orders", {
+      const order = await postJson<{ id: string; status: string; totalAmount: number }>("/orders", {
         customer: { name: customer.name, email: customer.email, phone: customer.phone },
         pickupTime: customer.pickupTime,
         items: cartItems.map((item) => ({ menuItemId: item.id, quantity: cart[item.id] }))
       });
       setCart({});
-      setStatus({ type: "success", message: "Order placed successfully. Your cafe favourites are getting ready." });
+      setOrderCode(order.id.slice(-8).toUpperCase());
+      setStatus({ type: "success", message: `Order placed successfully. Track code: ${order.id.slice(-8).toUpperCase()}. Payment selected: ${paymentMode}.` });
     } catch (error) {
       setStatus({ type: "error", message: error instanceof Error ? error.message : "Order failed." });
     }
@@ -156,13 +159,26 @@ export function MenuOrder({ items }: { items: MenuItem[] }) {
           <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-gradient-to-r from-cafe-caramel to-cafe-neon" style={{ width: `${Math.min(100, itemCount * 22)}%` }} /></div>
         </div>
 
+        <div className="mt-4 rounded-3xl border border-white/10 bg-white/[0.045] p-4">
+          <p className="mb-3 flex items-center gap-2 text-sm font-black text-white"><CreditCard size={16} className="text-cafe-caramel" /> Payment preference</p>
+          <div className="grid gap-2">
+            {["UPI at counter", "Card at counter", "Cash at counter"].map((mode) => (
+              <button key={mode} type="button" onClick={() => setPaymentMode(mode)} className={`rounded-2xl border px-4 py-3 text-left text-sm font-bold transition ${paymentMode === mode ? "border-cafe-caramel bg-cafe-caramel text-cafe-dark" : "border-white/10 bg-black/15 text-white/60 hover:bg-white/10"}`}>
+                {mode}
+              </button>
+            ))}
+          </div>
+          <p className="mt-3 text-xs leading-5 text-white/42">Online payment gateway can be connected later. Current flow records the order and lets customer pay at cafe pickup/counter.</p>
+        </div>
+
         <button onClick={orderNow} disabled={status.type === "loading"} className="primary-btn mt-5 w-full disabled:cursor-not-allowed disabled:opacity-60">
           {status.type === "loading" ? "Placing..." : "Place Order"}
         </button>
         {status.message && (
-          <p className={`mt-4 flex gap-2 rounded-2xl p-3 text-sm ${status.type === "success" ? "bg-cafe-neon/10 text-cafe-neon" : status.type === "error" ? "bg-red-500/10 text-red-100" : "bg-white/10 text-white/75"}`}>
-            {status.type === "success" && <CheckCircle2 size={18} />} {status.message}
-          </p>
+          <div className={`mt-4 rounded-2xl p-3 text-sm ${status.type === "success" ? "bg-cafe-neon/10 text-cafe-neon" : status.type === "error" ? "bg-red-500/10 text-red-100" : "bg-white/10 text-white/75"}`}>
+            <p className="flex gap-2">{status.type === "success" && <CheckCircle2 size={18} />} {status.message}</p>
+            {orderCode && <p className="mt-2 text-xs text-white/55">Use phone/email on Track Order page to see status updates.</p>}
+          </div>
         )}
       </aside>
     </section>

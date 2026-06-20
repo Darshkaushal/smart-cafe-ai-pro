@@ -14,8 +14,10 @@ type ChatMessage = { role: "user" | "assistant"; text: string };
 const prompts = [
   "Plan a birthday for 4",
   "Best drink under ₹200",
-  "Do you have Wi-Fi?",
-  "Suggest a date combo"
+  "Check table availability",
+  "How can I track order?",
+  "Franchise details",
+  "Careers/internship"
 ];
 
 export function ChatWidget() {
@@ -24,7 +26,7 @@ export function ChatWidget() {
   const [history, setHistory] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      text: "Hi, I’m DK’s Cafe Companion ✨ Ask me anything — menu suggestions, birthday planning, date table ideas, location, timing, budget combos, or what to order today. Hindi/Hinglish bhi chalega."
+      text: "Hi, I’m DK’s Cafe Companion ✨ Ask me anything — menu suggestions, birthday planning, date table ideas, offers, order tracking, table availability, careers, franchise, location or timing. Hindi/Hinglish bhi chalega."
     }
   ]);
   const [loading, setLoading] = useState(false);
@@ -112,7 +114,7 @@ export function ChatWidget() {
             onChange={(event) => setMessage(event.target.value)}
             onKeyDown={(event) => event.key === "Enter" && sendMessage()}
             className="input-field"
-            placeholder="Ask about menu, birthdays, timing..."
+            placeholder="Ask menu, offers, careers, tracking..."
           />
           <button onClick={() => sendMessage()} disabled={loading} className="grid w-14 place-items-center rounded-2xl bg-cafe-caramel text-cafe-dark disabled:opacity-60" aria-label="Send message"><Send size={18} /></button>
         </div>

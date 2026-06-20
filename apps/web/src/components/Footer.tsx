@@ -16,12 +16,19 @@ export function Footer() {
             <Link href="/booking" className="hover:text-cafe-caramel">Reserve</Link>
             <Link href="/gallery" className="hover:text-cafe-caramel">Gallery</Link>
             <Link href="/events" className="hover:text-cafe-caramel">Events</Link>
+            <Link href="/offers" className="hover:text-cafe-caramel">Offers</Link>
+            <Link href="/reviews" className="hover:text-cafe-caramel">Reviews</Link>
+            <Link href="/availability" className="hover:text-cafe-caramel">Table Availability</Link>
+            <Link href="/track-order" className="hover:text-cafe-caramel">Track Order</Link>
+            <Link href="/careers" className="hover:text-cafe-caramel">Careers</Link>
+            <Link href="/franchise" className="hover:text-cafe-caramel">Franchise</Link>
             <Link href="/contact" className="hover:text-cafe-caramel">Visit</Link>
           </div>
         </div>
         <div>
           <p className="font-bold text-white">Cafe hours</p>
           <p className="mt-3 text-sm leading-6 text-white/55">Open daily from 10:00 AM to 11:00 PM. Perfect for study breaks, birthdays, date nights and late evening coffee plans.</p>
+          <p className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-white/35">Owner links are kept private for a cleaner customer experience.</p>
         </div>
       </div>
     </footer>

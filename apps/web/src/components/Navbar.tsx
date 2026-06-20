@@ -8,10 +8,11 @@ import { useState } from "react";
 const links = [
   { href: "/", label: "Home" },
   { href: "/menu", label: "Menu" },
+  { href: "/offers", label: "Offers" },
   { href: "/booking", label: "Reserve" },
   { href: "/gallery", label: "Gallery" },
   { href: "/events", label: "Events" },
-  { href: "/about", label: "Story" },
+  { href: "/reviews", label: "Reviews" },
   { href: "/contact", label: "Visit" }
 ];
 
@@ -48,8 +49,8 @@ export function Navbar() {
           })}
         </div>
 
-        <Link href="/booking" className="hidden rounded-full border border-cafe-caramel/30 bg-cafe-caramel/10 px-5 py-2 text-sm font-black text-cafe-caramel transition hover:bg-cafe-caramel hover:text-cafe-dark md:inline-flex">
-          Reserve a Table
+        <Link href="/track-order" className="hidden rounded-full border border-cafe-caramel/30 bg-cafe-caramel/10 px-5 py-2 text-sm font-black text-cafe-caramel transition hover:bg-cafe-caramel hover:text-cafe-dark md:inline-flex">
+          Track Order
         </Link>
 
         <button onClick={() => setOpen((value) => !value)} className="grid h-11 w-11 place-items-center rounded-2xl border border-white/10 bg-white/5 md:hidden" aria-label="Open menu">
@@ -65,8 +66,8 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link href="/booking" onClick={() => setOpen(false)} className="primary-btn mt-2 w-full">
-              Reserve a Table
+            <Link href="/track-order" onClick={() => setOpen(false)} className="primary-btn mt-2 w-full">
+              Track Order
             </Link>
           </div>
         </div>

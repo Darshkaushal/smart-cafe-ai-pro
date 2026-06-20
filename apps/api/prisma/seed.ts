@@ -280,6 +280,118 @@ const menuItems = [
     sweetness: 0,
     temperature: "hot"
   }
+  ,
+  {
+    name: "Affogato Brownie Cup",
+    slug: "affogato-brownie-cup",
+    description: "Warm brownie topped with vanilla cream and a shot of espresso.",
+    category: MenuCategory.DESSERT,
+    price: 229,
+    tags: ["dessert", "coffee", "brownie", "sweet", "date", "best-seller"],
+    imageUrl: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=80",
+    sweetness: 4,
+    temperature: "warm"
+  },
+  {
+    name: "Jaipur Saffron Latte",
+    slug: "jaipur-saffron-latte",
+    description: "A warm latte with saffron notes, cardamom aroma and soft sweetness.",
+    category: MenuCategory.COFFEE,
+    price: 209,
+    tags: ["hot", "coffee", "saffron", "jaipur", "premium", "warm"],
+    imageUrl: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=80",
+    sweetness: 3,
+    temperature: "hot"
+  },
+  {
+    name: "Cranberry Lime Fizz",
+    slug: "cranberry-lime-fizz",
+    description: "Sparkling cranberry, fresh lime, mint and crushed ice for a bright cooler.",
+    category: MenuCategory.MOCKTAIL,
+    price: 189,
+    tags: ["cold", "cranberry", "lime", "fizzy", "refreshing", "mocktail"],
+    imageUrl: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=80",
+    sweetness: 3,
+    temperature: "cold"
+  },
+  {
+    name: "Cinnamon Roll Latte",
+    slug: "cinnamon-roll-latte",
+    description: "Comfort latte with cinnamon, vanilla and a bakery-style finish.",
+    category: MenuCategory.COFFEE,
+    price: 199,
+    tags: ["hot", "coffee", "cinnamon", "sweet", "comfort"],
+    imageUrl: "https://images.unsplash.com/photo-1522992319-0365e5f11656?auto=format&fit=crop&w=900&q=80",
+    sweetness: 4,
+    temperature: "hot"
+  },
+  {
+    name: "Paneer Tikka Panini",
+    slug: "paneer-tikka-panini",
+    description: "Grilled panini filled with paneer tikka, cheese and cafe-style sauces.",
+    category: MenuCategory.SNACK,
+    price: 229,
+    tags: ["snack", "paneer", "spicy", "filling", "sandwich"],
+    imageUrl: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=80",
+    sweetness: 0,
+    temperature: "hot"
+  },
+  {
+    name: "Truffle Mushroom Toastie",
+    slug: "truffle-mushroom-toastie",
+    description: "Creamy mushroom toastie with cheese, herbs and a premium cafe aroma.",
+    category: MenuCategory.SNACK,
+    price: 239,
+    tags: ["snack", "mushroom", "cheese", "savory", "premium"],
+    imageUrl: "https://images.unsplash.com/photo-1603046891726-36bfd957e0bf?auto=format&fit=crop&w=900&q=80",
+    sweetness: 0,
+    temperature: "hot"
+  },
+  {
+    name: "Belgian Hot Chocolate",
+    slug: "belgian-hot-chocolate",
+    description: "Thick hot chocolate with cocoa richness and a smooth creamy body.",
+    category: MenuCategory.COFFEE,
+    price: 219,
+    tags: ["hot", "chocolate", "sweet", "creamy", "winter"],
+    imageUrl: "https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&w=900&q=80",
+    sweetness: 5,
+    temperature: "hot"
+  },
+  {
+    name: "Raspberry White Chocolate Shake",
+    slug: "raspberry-white-chocolate-shake",
+    description: "Creamy raspberry shake with white chocolate drizzle and berry crumble.",
+    category: MenuCategory.SHAKE,
+    price: 259,
+    tags: ["cold", "sweet", "raspberry", "white chocolate", "shake", "dessert"],
+    imageUrl: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=80",
+    sweetness: 5,
+    temperature: "cold"
+  },
+  {
+    name: "Classic Veggie Pizza Slice",
+    slug: "classic-veggie-pizza-slice",
+    description: "Cafe-style pizza slice with cheese, bell peppers, corn and herbs.",
+    category: MenuCategory.SNACK,
+    price: 179,
+    tags: ["snack", "pizza", "cheese", "shareable", "savory"],
+    imageUrl: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80",
+    sweetness: 0,
+    temperature: "hot"
+  },
+  {
+    name: "Mango Cheesecake Shake",
+    slug: "mango-cheesecake-shake",
+    description: "Thick mango shake with cheesecake cream and biscuit crumble.",
+    category: MenuCategory.SHAKE,
+    price: 249,
+    tags: ["cold", "sweet", "mango", "cheesecake", "shake", "summer"],
+    imageUrl: "https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=900&q=80",
+    sweetness: 5,
+    temperature: "cold"
+  }
+
 
 ];
 

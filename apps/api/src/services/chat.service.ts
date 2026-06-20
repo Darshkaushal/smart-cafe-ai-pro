@@ -40,6 +40,45 @@ Food preference help: explain sweetness, temperature, spice, budget, mood, and p
 Important: Public customers should never see internal technical words like database, full-stack, ML, admin panel, etc.
 `;
 
+type KnowledgeDoc = {
+  title: string;
+  content: string;
+  keywords: string[];
+};
+
+const KNOWLEDGE_BASE: KnowledgeDoc[] = [
+  {
+    title: "Offers",
+    content: "DK's Cafe has cafe-style offers such as Cold Coffee Duo, Birthday Mini Table, Friends Snack Combo and Study Break Saver. Offers are redeemed by reserving a table and mentioning the offer in notes.",
+    keywords: ["offer", "discount", "combo", "deal", "birthday", "friends", "study"]
+  },
+  {
+    title: "Events",
+    content: "Events include birthday tables, date evenings, friends hangouts, mini celebrations and weekday community moments. Guests should reserve a table and add notes for cake timing, decor, quiet corner or group size.",
+    keywords: ["event", "birthday", "party", "date", "anniversary", "celebration", "decor"]
+  },
+  {
+    title: "Career",
+    content: "DK's Cafe accepts interest for barista trainee, cafe host, kitchen assistant and content/community intern roles. Applicants can send a short note through the contact page.",
+    keywords: ["job", "career", "internship", "barista", "hiring", "apply", "work"]
+  },
+  {
+    title: "Franchise",
+    content: "Franchise interest is handled through the contact page. The concept focuses on compact cafe stores, signature drinks, aesthetic interiors, community events and repeatable operations.",
+    keywords: ["franchise", "partner", "business", "outlet", "investment", "store"]
+  },
+  {
+    title: "Order tracking",
+    content: "Customers can track recent orders from the Track Order page using the phone number or email used while ordering. Status values include pending, preparing, ready, completed or cancelled.",
+    keywords: ["track", "order", "status", "ready", "preparing", "pickup"]
+  },
+  {
+    title: "Table availability",
+    content: "Customers can check table availability by date, time and guest count. Availability is based on current reservations for that slot.",
+    keywords: ["availability", "seat", "table", "slot", "reserve", "booking", "guests"]
+  }
+];
+
 function tagsOf(item: MenuItem): string[] {
   return Array.isArray(item.tags) ? item.tags.map(String) : [];
 }
@@ -54,6 +93,32 @@ function detectLanguage(text: string) {
 
 function normalize(text: string) {
   return text.toLowerCase().trim();
+}
+
+function tokenize(text: string) {
+  return normalize(text)
+    .replace(/[^a-z0-9₹ऀ-ॿ ]/gi, " ")
+    .split(/\s+/)
+    .filter((word) => word.length > 2);
+}
+
+function retrieveCafeKnowledge(message: string) {
+  const words = new Set(tokenize(message));
+  return KNOWLEDGE_BASE
+    .map((doc) => {
+      const keywordScore = doc.keywords.reduce((score, keyword) => score + (normalize(message).includes(keyword) ? 3 : 0), 0);
+      const contentScore = tokenize(`${doc.title} ${doc.content}`).reduce((score, word) => score + (words.has(word) ? 1 : 0), 0);
+      return { doc, score: keywordScore + contentScore };
+    })
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((item) => item.doc);
+}
+
+function knowledgeForPrompt(docs: KnowledgeDoc[]) {
+  if (!docs.length) return "No extra cafe knowledge matched.";
+  return docs.map((doc) => `- ${doc.title}: ${doc.content}`).join("\n");
 }
 
 function localRecommendations(message: string, menu: MenuItem[]): Recommendation[] {
@@ -164,6 +229,26 @@ function answerCafeFaq(message: string, recommendations: Recommendation[]) {
     return "You can pay by UPI, card or cash at the cafe. For quick pickup, place the order first and collect it at your selected time.\n\nHindi: Payment UPI, card aur cash se ho sakti hai. Pickup time select karke order place kar sakte ho.";
   }
 
+  if (/offer|discount|combo|deal/i.test(text)) {
+    return "DK's Cafe has mood-based offers like Cold Coffee Duo, Birthday Mini Table, Friends Snack Combo and Study Break Saver. Visit the Offers page, choose a combo and mention it in reservation notes.\n\nHindi: Offers page par combo select karo aur booking notes me offer mention kar do.";
+  }
+
+  if (/track|status|ready|preparing|pickup/i.test(text)) {
+    return "You can track your recent order from the Track Order page using the same phone or email used while ordering. Status updates show pending, preparing, ready, completed or cancelled.\n\nHindi: Track Order page me phone/email daal kar order status dekh sakte ho.";
+  }
+
+  if (/availability|available|seat|slot|table free/i.test(text)) {
+    return "Use the Table Availability page to check date, time slot and guest count before reserving. It gives a quick signal based on current reservations.\n\nHindi: Table Availability page par date/time/guests select karke slot check kar sakte ho.";
+  }
+
+  if (/franchise|partner|outlet|business/i.test(text)) {
+    return "For franchise or partnership interest, visit the Franchise page and send details through the contact form. Mention city, area, budget range and experience.\n\nHindi: Franchise ke liye Franchise page dekho aur Contact page se enquiry bhejo.";
+  }
+
+  if (/job|career|internship|hiring|barista|apply/i.test(text)) {
+    return "For careers, DK's Cafe has realistic roles like Barista Trainee, Cafe Host, Kitchen Assistant and Content Intern. Visit Careers and send a short note from Contact.\n\nHindi: Careers page par role dekho, phir Contact page se apply note bhejo.";
+  }
+
   if (/recommend|suggest|best|drink|coffee|cold|sweet|hot|snack|dessert|under|below|budget|mood|bhookh|hungry|chahiye/i.test(text)) {
     return fallbackRecommendationAnswer(recommendations);
   }
@@ -190,7 +275,7 @@ function historyForPrompt(history?: ChatHistoryItem[]) {
     .join("\n");
 }
 
-async function geminiAnswer(message: string, menu: MenuItem[], recommendations: Recommendation[], language: string, history?: ChatHistoryItem[]) {
+async function geminiAnswer(message: string, menu: MenuItem[], recommendations: Recommendation[], language: string, history?: ChatHistoryItem[], knowledgeDocs: KnowledgeDoc[] = []) {
   if (!ai) return answerCafeFaq(message, recommendations);
 
   const prompt = `You are DK's Cafe Companion, a premium customer-facing assistant for a modern Jaipur cafe. Behave like a polished ChatGPT/Gemini-style assistant, but keep the cafe brand natural.
@@ -202,6 +287,9 @@ Current customer message: "${message}"
 
 Recent conversation:
 ${historyForPrompt(history)}
+
+Relevant cafe knowledge retrieved for this message:
+${knowledgeForPrompt(knowledgeDocs)}
 
 Available menu:
 ${menuForPrompt(menu)}
@@ -236,7 +324,8 @@ export async function handleChat(input: ChatInput) {
   const language = detectLanguage(message);
   const menu = await prisma.menuItem.findMany({ where: { isAvailable: true }, orderBy: [{ category: "asc" }, { createdAt: "asc" }] });
   const recommendations = localRecommendations(message, menu);
-  const answer = await geminiAnswer(message, menu, recommendations, language, input.history);
+  const knowledgeDocs = retrieveCafeKnowledge(message);
+  const answer = await geminiAnswer(message, menu, recommendations, language, input.history, knowledgeDocs);
 
   const customer = input.name
     ? await findOrCreateCustomer({ name: input.name, email: input.email, phone: input.phone })

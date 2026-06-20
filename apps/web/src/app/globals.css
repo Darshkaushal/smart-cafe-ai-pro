@@ -123,3 +123,49 @@ body::before {
 .pulse-soft {
   animation: pulseSoft 4s ease-in-out infinite;
 }
+
+.perspective-\[1200px\] {
+  perspective: 1200px;
+}
+
+.cafe-3d-cup {
+  transform-style: preserve-3d;
+  animation: cafeCupOrbit 9s ease-in-out infinite;
+}
+
+@keyframes cafeCupOrbit {
+  0%, 100% { transform: translate(-50%, -50%) rotateX(12deg) rotateY(-18deg) translateZ(0); }
+  50% { transform: translate(-50%, -55%) rotateX(18deg) rotateY(18deg) translateZ(18px); }
+}
+
+.steam-line {
+  animation: steamRise 2.8s ease-in-out infinite;
+  filter: blur(0.2px);
+}
+
+@keyframes steamRise {
+  0% { transform: translateY(20px) scaleY(0.55); opacity: 0; }
+  35% { opacity: 0.85; }
+  100% { transform: translateY(-28px) scaleY(1.12); opacity: 0; }
+}
+
+.instagram-tile {
+  @apply relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.055];
+}
+
+.instagram-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(8, 3, 3, 0.78), transparent 54%);
+  pointer-events: none;
+}
+
+.marquee-track {
+  animation: marqueeCafe 28s linear infinite;
+}
+
+@keyframes marqueeCafe {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
