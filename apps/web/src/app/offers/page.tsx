@@ -1,3 +1,4 @@
+import { ThreeDFeatureStrip } from "@/components/Visual3DSections";
 import Link from "next/link";
 import { ArrowRight, BadgePercent, CakeSlice, Coffee, Sparkles, UsersRound } from "lucide-react";
 import { CafeMotionScene } from "@/components/CafeMotionScene";
@@ -52,6 +53,7 @@ export default function OffersPage() {
           ))}
         </div>
       </section>
+          <ThreeDFeatureStrip />
     </main>
   );
 }

@@ -1,4 +1,5 @@
 import { MenuOrder } from "@/components/MenuOrder";
+import { FloatingProductShowcase } from "@/components/Visual3DSections";
 import { getMenu } from "@/lib/api";
 
 export default async function MenuPage() {
@@ -19,6 +20,9 @@ export default async function MenuPage() {
             <div className="rounded-3xl bg-white/[0.05] p-4"><p className="text-2xl font-black text-cafe-neon">Jaipur</p><p className="text-xs text-white/45">Vibe</p></div>
           </div>
         </div>
+      </div>
+      <FloatingProductShowcase />
+      <div className="page-shell">
         <MenuOrder items={items} />
       </div>
     </main>

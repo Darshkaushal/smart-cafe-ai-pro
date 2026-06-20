@@ -1,3 +1,4 @@
+import { SmoothCTA3D } from "@/components/Visual3DSections";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -248,6 +249,7 @@ export default function GalleryPage() {
           </div>
         </div>
       </section>
+          <SmoothCTA3D />
     </main>
   );
 }

@@ -1,3 +1,4 @@
+import { SmoothCTA3D } from "@/components/Visual3DSections";
 import Link from "next/link";
 import { ArrowRight, Heart, MessageCircleHeart, Star } from "lucide-react";
 
@@ -42,6 +43,7 @@ export default function ReviewsPage() {
         <p className="mx-auto mt-3 max-w-2xl text-white/58">Send your review, birthday photo request or event feedback. The cafe team uses guest feedback to improve ambience, menu and service.</p>
         <Link href="/contact" className="primary-btn mt-6">Share feedback <ArrowRight size={16} /></Link>
       </section>
+          <SmoothCTA3D />
     </main>
   );
 }

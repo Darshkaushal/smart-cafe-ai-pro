@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CakeSlice, Coffee, Heart, MapPin, Music2, Sparkles, Star, Timer, Utensils } from "lucide-react";
 import { CafeMotionScene } from "@/components/CafeMotionScene";
+import { FloatingProductShowcase, SmoothCTA3D, ThreeDFeatureStrip } from "@/components/Visual3DSections";
 
 const experiences = [
   { icon: Coffee, title: "Signature sips", text: "Cold coffee clouds, berry frappes, hot brews, coolers and dessert-style drinks made for every mood." },
@@ -50,6 +51,10 @@ export default function HomePage() {
           <CafeMotionScene />
         </div>
       </section>
+
+      <ThreeDFeatureStrip />
+
+      <FloatingProductShowcase />
 
       <section className="page-shell py-10">
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -106,6 +111,8 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      <SmoothCTA3D />
 
       <section className="page-shell py-16">
         <div className="grid gap-5 md:grid-cols-3">
