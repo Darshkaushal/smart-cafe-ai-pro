@@ -4,14 +4,18 @@ import { useEffect, useMemo, useState } from "react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AdminShell } from "@/components/AdminShell";
 import { apiFetch } from "@/lib/api";
-import { BarChart3, BotMessageSquare, BrainCircuit, CalendarCheck, IndianRupee, LineChart, ShoppingBag, UsersRound } from "lucide-react";
+import { BarChart3, BotMessageSquare, BrainCircuit, CalendarCheck, Crown, IndianRupee, LineChart, MessageCircle, ShoppingBag, Sparkles, Timer, TrendingUp, UsersRound } from "lucide-react";
 
 type Overview = {
   stats: { bookings: number; orders: number; customers: number; conversations: number; revenue: number };
   predictions: Array<{ id: string; targetDate: string; expectedOccupancy: number; expectedBookings: number; confidence: number }>;
-  latestOrders?: Array<{ id: string; status: string; totalAmount: number; createdAt: string }>;
-  latestBookings?: Array<{ id: string; status: string; guests: number; createdAt: string }>;
+  latestOrders?: Array<{ id: string; status: string; totalAmount: number; createdAt: string; customer?: { name: string } | null }>;
+  latestBookings?: Array<{ id: string; status: string; guests: number; createdAt: string; customer?: { name: string } | null }>;
 };
+
+function formatMoney(value: number) {
+  return `₹${Number(value || 0).toLocaleString("en-IN")}`;
+}
 
 export default function DashboardPage() {
   const [data, setData] = useState<Overview | null>(null);
@@ -22,11 +26,11 @@ export default function DashboardPage() {
   }, []);
 
   const stats = data ? [
-    { label: "Bookings", value: data.stats.bookings, icon: CalendarCheck, tone: "text-admin-gold", width: Math.min(100, data.stats.bookings * 12) },
-    { label: "Orders", value: data.stats.orders, icon: ShoppingBag, tone: "text-admin-green", width: Math.min(100, data.stats.orders * 12) },
-    { label: "Customers", value: data.stats.customers, icon: UsersRound, tone: "text-sky-300", width: Math.min(100, data.stats.customers * 10) },
-    { label: "Messages", value: data.stats.conversations, icon: BotMessageSquare, tone: "text-purple-300", width: Math.min(100, data.stats.conversations * 10) },
-    { label: "Revenue", value: `₹${data.stats.revenue}`, icon: IndianRupee, tone: "text-admin-green", width: Math.min(100, data.stats.revenue / 80) }
+    { label: "Bookings", value: data.stats.bookings, icon: CalendarCheck, tone: "text-admin-gold", width: Math.min(100, Math.max(10, data.stats.bookings * 12)), note: "table demand" },
+    { label: "Orders", value: data.stats.orders, icon: ShoppingBag, tone: "text-admin-green", width: Math.min(100, Math.max(10, data.stats.orders * 12)), note: "kitchen flow" },
+    { label: "Customers", value: data.stats.customers, icon: UsersRound, tone: "text-sky-300", width: Math.min(100, Math.max(10, data.stats.customers * 10)), note: "guest records" },
+    { label: "Chats", value: data.stats.conversations, icon: BotMessageSquare, tone: "text-purple-300", width: Math.min(100, Math.max(10, data.stats.conversations * 10)), note: "assistant queries" },
+    { label: "Revenue", value: formatMoney(data.stats.revenue), icon: IndianRupee, tone: "text-admin-green", width: Math.min(100, Math.max(12, data.stats.revenue / 80)), note: "order value" }
   ] : [];
 
   const orderMix = useMemo(() => {
@@ -35,32 +39,50 @@ export default function DashboardPage() {
     return labels.map((label) => ({ label, count: orders.filter((order) => order.status === label).length }));
   }, [data]);
 
+  const avgOccupancy = data?.predictions.length ? Math.round(data.predictions.reduce((sum, p) => sum + p.expectedOccupancy, 0) / data.predictions.length) : 0;
+
   return (
     <AuthGuard>
       <AdminShell>
-        <div className="mb-8 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
-          <div>
-            <p className="text-admin-gold">Live business control center</p>
-            <h1 className="mt-2 text-4xl font-black tracking-tight md:text-6xl">Owner Dashboard</h1>
-            <p className="mt-3 max-w-2xl text-white/50">Private dashboard for orders, customers, reservations, cafe messages, order flow and preparation insights.</p>
+        <div className="mb-8 grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+          <div className="admin-hero-card rounded-[2.2rem] border border-admin-line p-6 md:p-8">
+            <p className="flex items-center gap-2 text-admin-gold"><Crown size={18} /> Royal owner command center</p>
+            <h1 className="mt-3 text-4xl font-black tracking-tight md:text-6xl">Dashboard that feels like a real startup cockpit.</h1>
+            <p className="mt-4 max-w-3xl text-white/55">Manage reservations, orders, customers, chat conversations, demand signals and cafe preparation from one premium private dashboard.</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <span className="rounded-full bg-admin-gold/15 px-4 py-2 text-sm font-black text-admin-gold">Live API connected</span>
+              <span className="rounded-full bg-admin-green/10 px-4 py-2 text-sm font-black text-admin-green">Private owner access</span>
+              <span className="rounded-full bg-white/5 px-4 py-2 text-sm font-black text-white/60">Mobile responsive</span>
+            </div>
           </div>
-          <div className="admin-soft p-4 text-sm text-white/55">
-            <p className="font-bold text-white">System status</p>
-            <p className="mt-1">Storefront, cafe assistant and dashboard connected</p>
+          <div className="admin-card overflow-hidden">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-admin-gold">Today&apos;s signal</p>
+                <h2 className="mt-1 text-3xl font-black">{avgOccupancy || "--"}%</h2>
+              </div>
+              <TrendingUp className="text-admin-green" size={34} />
+            </div>
+            <p className="mt-3 text-sm text-white/48">Average upcoming occupancy from saved demand predictions.</p>
+            <div className="mt-7 h-3 overflow-hidden rounded-full bg-white/5"><div className="h-full rounded-full bg-gradient-to-r from-admin-gold to-admin-green" style={{ width: `${avgOccupancy || 0}%` }} /></div>
+            <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
+              <div className="rounded-2xl bg-white/[0.04] p-4"><p className="text-white/40">Latest orders</p><p className="mt-1 text-2xl font-black text-white">{data?.latestOrders?.length || 0}</p></div>
+              <div className="rounded-2xl bg-white/[0.04] p-4"><p className="text-white/40">Latest bookings</p><p className="mt-1 text-2xl font-black text-white">{data?.latestBookings?.length || 0}</p></div>
+            </div>
           </div>
         </div>
 
         {error && <p className="admin-card mb-5 border-red-500/20 bg-red-500/10 text-red-100">{error}</p>}
         {!data ? <p className="text-white/60">Loading dashboard...</p> : (
           <>
-            <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-              {stats.map(({ label, value, icon: Icon, tone, width }) => (
-                <div key={label} className="admin-card overflow-hidden">
+            <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+              {stats.map(({ label, value, icon: Icon, tone, width, note }) => (
+                <div key={label} className="admin-card admin-kpi-card overflow-hidden">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm text-white/50">{label}</p>
-                    <Icon className={tone} size={22} />
+                    <div><p className="text-sm text-white/48">{label}</p><p className="mt-1 text-xs uppercase tracking-[0.2em] text-white/25">{note}</p></div>
+                    <Icon className={tone} size={24} />
                   </div>
-                  <p className="mt-4 text-3xl font-black">{value}</p>
+                  <p className="mt-5 text-3xl font-black">{value}</p>
                   <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/5"><div className="h-full rounded-full bg-gradient-to-r from-admin-gold to-admin-green" style={{ width: `${width}%` }} /></div>
                 </div>
               ))}
@@ -68,12 +90,12 @@ export default function DashboardPage() {
 
             <section className="mt-6 grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
               <div className="admin-card">
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                   <div>
                     <p className="text-admin-gold">Demand analytics</p>
                     <h2 className="mt-1 text-2xl font-black">Upcoming Occupancy Forecast</h2>
                   </div>
-                  <p className="rounded-full bg-admin-green/10 px-4 py-2 text-sm font-bold text-admin-green">Weekly model refresh</p>
+                  <p className="rounded-full bg-admin-green/10 px-4 py-2 text-sm font-bold text-admin-green">Weekly refresh ready</p>
                 </div>
                 <div className="mt-6 flex h-72 items-end gap-3 rounded-[1.5rem] border border-admin-line bg-black/20 p-4">
                   {data.predictions.slice(0, 7).map((prediction) => (
@@ -102,22 +124,37 @@ export default function DashboardPage() {
               </div>
             </section>
 
+            <section className="mt-6 grid gap-6 xl:grid-cols-2">
+              <div className="admin-card">
+                <div className="flex items-center gap-3"><Timer className="text-admin-gold" /><h2 className="text-2xl font-black">Latest bookings</h2></div>
+                <div className="mt-5 grid gap-3">
+                  {(data.latestBookings || []).slice(0, 5).map((booking) => (
+                    <div key={booking.id} className="flex items-center justify-between gap-4 rounded-2xl bg-white/[0.035] p-4">
+                      <div><p className="font-black text-white">{booking.customer?.name || "Guest"}</p><p className="text-sm text-white/40">{booking.guests} guests · {new Date(booking.createdAt).toLocaleString()}</p></div>
+                      <span className="rounded-full bg-admin-gold/10 px-3 py-1 text-xs font-black text-admin-gold">{booking.status}</span>
+                    </div>
+                  ))}
+                  {!data.latestBookings?.length && <p className="text-white/45">No bookings yet.</p>}
+                </div>
+              </div>
+              <div className="admin-card">
+                <div className="flex items-center gap-3"><MessageCircle className="text-admin-green" /><h2 className="text-2xl font-black">Latest orders</h2></div>
+                <div className="mt-5 grid gap-3">
+                  {(data.latestOrders || []).slice(0, 5).map((order) => (
+                    <div key={order.id} className="flex items-center justify-between gap-4 rounded-2xl bg-white/[0.035] p-4">
+                      <div><p className="font-black text-white">{order.customer?.name || "Guest"}</p><p className="text-sm text-white/40">{formatMoney(order.totalAmount)} · {new Date(order.createdAt).toLocaleString()}</p></div>
+                      <span className="rounded-full bg-admin-green/10 px-3 py-1 text-xs font-black text-admin-green">{order.status}</span>
+                    </div>
+                  ))}
+                  {!data.latestOrders?.length && <p className="text-white/45">No orders yet.</p>}
+                </div>
+              </div>
+            </section>
+
             <section className="mt-6 grid gap-6 xl:grid-cols-3">
-              <div className="admin-card bg-gradient-to-br from-admin-gold/15 to-white/[0.035]">
-                <BrainCircuit className="text-admin-gold" />
-                <h2 className="mt-4 text-2xl font-black">Assistant intelligence</h2>
-                <p className="mt-3 text-sm leading-6 text-white/58">Hybrid cafe assistant with Gemini-ready responses, local recommendation scoring and small knowledge retrieval for offers, careers, franchise, tracking and availability.</p>
-              </div>
-              <div className="admin-card bg-gradient-to-br from-admin-green/10 to-white/[0.035]">
-                <LineChart className="text-admin-green" />
-                <h2 className="mt-4 text-2xl font-black">Prediction model</h2>
-                <p className="mt-3 text-sm leading-6 text-white/58">Booking history is transformed into date features and rolling averages so the demand tool can estimate future occupancy.</p>
-              </div>
-              <div className="admin-card bg-gradient-to-br from-sky-400/10 to-white/[0.035]">
-                <BarChart3 className="text-sky-300" />
-                <h2 className="mt-4 text-2xl font-black">Manager view</h2>
-                <p className="mt-3 text-sm leading-6 text-white/58">The dashboard converts operations into quick signals: revenue, order flow, customers, conversations and table demand.</p>
-              </div>
+              <div className="admin-card bg-gradient-to-br from-admin-gold/15 to-white/[0.035]"><BrainCircuit className="text-admin-gold" /><h2 className="mt-4 text-2xl font-black">Cafe assistant</h2><p className="mt-3 text-sm leading-6 text-white/58">Menu-aware customer concierge with Gemini-ready answers, local recommendations and cafe knowledge retrieval.</p></div>
+              <div className="admin-card bg-gradient-to-br from-admin-green/10 to-white/[0.035]"><LineChart className="text-admin-green" /><h2 className="mt-4 text-2xl font-black">Prediction signals</h2><p className="mt-3 text-sm leading-6 text-white/58">Booking history is converted into date signals and rolling averages to estimate upcoming occupancy.</p></div>
+              <div className="admin-card bg-gradient-to-br from-sky-400/10 to-white/[0.035]"><BarChart3 className="text-sky-300" /><h2 className="mt-4 text-2xl font-black">Manager view</h2><p className="mt-3 text-sm leading-6 text-white/58">A premium operations summary for orders, bookings, customer growth, revenue and conversations.</p></div>
             </section>
           </>
         )}

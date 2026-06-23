@@ -28,6 +28,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(env.PORT, "0.0.0.0", () => {
-  console.log(`DK's Cafe API running on http://0.0.0.0:${env.PORT}`);
+server.listen(env.PORT, () => {
+  console.log(`DK's Cafe API running on http://localhost:${env.PORT}`);
 });

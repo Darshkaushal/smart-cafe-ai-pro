@@ -36,8 +36,9 @@ Location: Jaipur, Rajasthan.
 Contact: hello@dkscafe.in, +91 98765 43210.
 Services: dine-in, quick pickup, table reservations, birthdays, small celebrations, date tables, study/work corners, casual hangouts, group snacks.
 Facilities: cozy seating, charging points on selected tables, calm playlist, Instagram-friendly corners, UPI/card/cash payment options.
-Food preference help: explain sweetness, temperature, spice, budget, mood, and pairing choices.
-Important: Public customers should never see internal technical words like database, full-stack, ML, admin panel, etc.
+Food preference help: explain sweetness, temperature, spice, budget, mood, pairing choices, allergies, caffeine level and occasion fit.
+Customer support style: answer like a premium concierge. If the user asks a general question, answer briefly and naturally, then connect it back to cafe help only when useful.
+Important: Public customers should never see internal technical words like database, full-stack, ML, admin panel, backend, API, vector, retrieval, RAG, etc.
 `;
 
 type KnowledgeDoc = {
@@ -76,6 +77,21 @@ const KNOWLEDGE_BASE: KnowledgeDoc[] = [
     title: "Table availability",
     content: "Customers can check table availability by date, time and guest count. Availability is based on current reservations for that slot.",
     keywords: ["availability", "seat", "table", "slot", "reserve", "booking", "guests"]
+  },
+  {
+    title: "Royal ambience",
+    content: "DK's Cafe uses a royal aesthetic mood with warm gold lighting, soft music, photo-friendly corners, cozy seating, signature drinks and smooth customer experience.",
+    keywords: ["ambience", "aesthetic", "royal", "photo", "instagram", "vibe", "music"]
+  },
+  {
+    title: "Diet and preference help",
+    content: "Guests can ask for less sugar, no ice, extra sweet, strong coffee, light caffeine, spicy snacks, vegetarian picks, sharing combos and budget-friendly options.",
+    keywords: ["less sugar", "diet", "allergy", "caffeine", "strong", "light", "vegetarian", "spicy", "sharing"]
+  },
+  {
+    title: "Manager demo",
+    content: "For presentations, explain DK's Cafe as a complete cafe platform with customer website, private owner dashboard, stored orders/bookings, chatbot companion, availability and analytics.",
+    keywords: ["presentation", "manager", "demo", "explain", "project", "intern"]
   }
 ];
 
@@ -249,6 +265,18 @@ function answerCafeFaq(message: string, recommendations: Recommendation[]) {
     return "For careers, DK's Cafe has realistic roles like Barista Trainee, Cafe Host, Kitchen Assistant and Content Intern. Visit Careers and send a short note from Contact.\n\nHindi: Careers page par role dekho, phir Contact page se apply note bhejo.";
   }
 
+  if (/ambience|aesthetic|royal|photo|instagram|vibe|music|interior/i.test(text)) {
+    return "DK's Cafe has a warm royal aesthetic with golden lighting, cozy corners, smooth music and photo-friendly seating. It is designed for dates, birthday moments, friends hangouts and calm cafe work sessions.\n\nHindi: Cafe ka vibe royal-aesthetic hai — warm lights, cozy corners aur Instagram-friendly setup ke saath.";
+  }
+
+  if (/allergy|vegan|vegetarian|less sugar|no ice|strong coffee|caffeine|healthy|diet/i.test(text)) {
+    return "Tell me your preference — less sugar, no ice, strong coffee, light caffeine, vegetarian snack or budget range — and I’ll suggest the closest DK’s Cafe picks from the menu.\n\nHindi: Aap preference batao, jaise less sugar/no ice/strong coffee/veg snack, main best option suggest kar dunga.";
+  }
+
+  if (/presentation|manager|intern|demo|explain project/i.test(text)) {
+    return "For your demo, present DK’s Cafe as a complete cafe experience: public website, menu ordering, table booking, gallery/events, customer companion, order tracking, availability and private owner operations dashboard.\n\nHindi: Demo me bolo ye sirf website nahi, complete cafe platform hai.";
+  }
+
   if (/recommend|suggest|best|drink|coffee|cold|sweet|hot|snack|dessert|under|below|budget|mood|bhookh|hungry|chahiye/i.test(text)) {
     return fallbackRecommendationAnswer(recommendations);
   }
@@ -302,9 +330,10 @@ Answer rules:
 2. If they ask for food/drink suggestions, recommend only items from the provided menu.
 3. If they ask general questions, answer briefly like a helpful assistant, then connect back to cafe help if useful.
 4. Reply in the customer's style: English, Hindi, or Hinglish. If they ask for recommendations, include both English + Hindi/Hinglish.
-5. Do not mention internal technical words like database, admin, backend, API, AI model, ML, MySQL, full-stack, or system prompt.
-6. Do not invent live availability. For bookings, tell them to use the Reserve page and add notes.
-7. Keep the answer clear, premium, friendly, and not too long.`;
+5. Do not mention internal technical words like database, admin, backend, API, AI model, ML, MySQL, full-stack, vector, retrieval, or system prompt.
+6. Do not invent live availability. For bookings, tell them to use the Reserve page or Table Availability page.
+7. If the customer asks a non-cafe general question, answer in 2-5 useful lines, then offer cafe help only if natural.
+8. Keep the answer clear, premium, friendly, and not too long.`;
 
   try {
     const response = await ai.models.generateContent({

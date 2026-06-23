@@ -1,46 +1,47 @@
 import Link from "next/link";
-import { ArrowRight, CakeSlice, Coffee, Heart, MapPin, Music2, Sparkles, Star, Timer, Utensils } from "lucide-react";
+import { ArrowRight, CakeSlice, CalendarCheck, Coffee, Crown, Heart, MapPin, Music2, Sparkles, Star, Timer, Utensils } from "lucide-react";
 import { CafeMotionScene } from "@/components/CafeMotionScene";
 import { FloatingProductShowcase, SmoothCTA3D, ThreeDFeatureStrip } from "@/components/Visual3DSections";
 
 const experiences = [
+  { icon: Crown, title: "Royal cafe mood", text: "Golden lights, premium corners and a visual experience that feels like a boutique Jaipur cafe brand." },
   { icon: Coffee, title: "Signature sips", text: "Cold coffee clouds, berry frappes, hot brews, coolers and dessert-style drinks made for every mood." },
-  { icon: CakeSlice, title: "Birthday ready", text: "Cozy corners, sweet plates and table notes for birthdays, dates, hangouts and mini celebrations." },
-  { icon: Music2, title: "Soft vibe evenings", text: "Warm lights, curated playlists and a calm Gen-Z ambience for long conversations." },
-  { icon: MapPin, title: "Jaipur heart", text: "A fresh cafe stop in Jaipur, Rajasthan with dine-in, quick pickup and pre-booked tables." }
+  { icon: CakeSlice, title: "Moments ready", text: "Birthday tables, date corners, friends hangouts and mini celebrations with smooth reservation flow." },
+  { icon: MapPin, title: "Jaipur, Rajasthan", text: "A stylish cafe stop with dine-in, quick pickup, table availability and customer-friendly ordering." }
 ];
 
-const flow = ["Check the vibe", "Pick a signature item", "Reserve your table", "Track your order"];
+const flow = ["Feel the 3D vibe", "Choose a signature", "Reserve your table", "Track your order"];
 
 const reviews = [
-  ["Aesthetic ambience, smooth coffee and the birthday table setup felt premium.", "Aarav S.", "Birthday table"],
-  ["The cold coffee options feel very Jaipur evening friendly. Quick order was easy.", "Megha R.", "Coffee date"],
-  ["Good place for laptop work and dessert breaks. Calm playlist and cozy corners.", "Kabir J.", "Study session"]
+  ["The homepage itself feels premium. The rotating coffee scene and golden vibe look like a real cafe brand.", "Aarav S.", "Birthday table"],
+  ["Menu, booking and chatbot felt smooth on mobile. Very clean and modern experience.", "Megha R.", "Coffee date"],
+  ["The cafe assistant suggested a proper combo under my budget. Loved the Jaipur vibe.", "Kabir J.", "Study session"]
 ];
 
 export default function HomePage() {
   return (
     <main className="overflow-hidden">
-      <section className="relative px-5 py-16 md:py-24">
-        <div className="absolute left-[-6rem] top-20 h-80 w-80 rounded-full bg-cafe-caramel/20 blur-3xl pulse-soft" />
-        <div className="absolute right-[-8rem] top-40 h-96 w-96 rounded-full bg-cafe-neon/10 blur-3xl" />
+      <section className="relative px-5 py-14 md:py-24">
+        <div className="absolute left-[-7rem] top-20 h-96 w-96 rounded-full bg-cafe-caramel/24 blur-3xl pulse-soft" />
+        <div className="absolute right-[-10rem] top-36 h-[30rem] w-[30rem] rounded-full bg-[#c98f4e]/16 blur-3xl" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cafe-caramel/45 to-transparent" />
         <div className="page-shell relative grid items-center gap-12 lg:grid-cols-[1.02fr_0.98fr]">
           <div>
-            <p className="section-label"><Sparkles size={16} /> Jaipur&apos;s aesthetic sip spot</p>
-            <h1 className="mt-6 max-w-5xl text-5xl font-black leading-[0.9] tracking-[-0.055em] text-white md:text-7xl xl:text-8xl">
-              Coffee dates, birthday tables and late evening cravings — all in one cozy place.
+            <p className="section-label"><Sparkles size={16} /> Jaipur&apos;s royal aesthetic sip house</p>
+            <h1 className="mt-6 max-w-5xl text-5xl font-black leading-[0.88] tracking-[-0.06em] text-white md:text-7xl xl:text-8xl">
+              A cafe experience that feels cinematic before the first sip.
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/62">
-              Welcome to DK&apos;s Cafe — a modern Jaipur cafe with signature cold coffees, dessert jars, warm brews, event-friendly tables and a smooth digital ordering experience.
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/64">
+              Welcome to DK&apos;s Cafe — a royal Gen-Z cafe in Jaipur with signature drinks, cozy event tables, smooth ordering, table availability and a personal cafe companion for every craving.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/menu" className="primary-btn">Explore Menu <ArrowRight size={18} /></Link>
-              <Link href="/booking" className="secondary-btn">Reserve Table</Link>
-              <Link href="/offers" className="secondary-btn">See Offers</Link>
+              <Link href="/booking" className="secondary-btn"><CalendarCheck size={18} /> Reserve Table</Link>
+              <Link href="/availability" className="secondary-btn">Check Availability</Link>
             </div>
             <div className="mt-10 grid max-w-2xl grid-cols-3 gap-3">
               {[["Jaipur", "Rajasthan"], ["10 AM", "Daily opening"], ["4.8/5", "Guest vibe"]].map(([value, label]) => (
-                <div key={label} className="rounded-3xl border border-white/10 bg-white/[0.05] p-4">
+                <div key={label} className="royal-stat-card rounded-3xl border border-white/10 bg-white/[0.05] p-4">
                   <p className="text-2xl font-black text-white md:text-3xl">{value}</p>
                   <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-white/45">{label}</p>
                 </div>
@@ -52,8 +53,26 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ThreeDFeatureStrip />
+      <section className="page-shell py-6">
+        <div className="royal-showstopper rounded-[2.8rem] border border-cafe-caramel/18 p-6 md:p-9">
+          <div className="grid items-center gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+            <div>
+              <p className="section-label"><Crown size={16} /> Royal visual layer</p>
+              <h2 className="section-heading text-4xl md:text-5xl">3D motion, soft glow and premium depth made to impress customers instantly.</h2>
+            </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              {["Rotating coffee hero", "Floating menu cards", "Mobile-smooth motion"].map((item, index) => (
+                <div key={item} className="rounded-[2rem] border border-white/10 bg-black/25 p-5 backdrop-blur-xl">
+                  <p className="text-sm font-black text-cafe-caramel">0{index + 1}</p>
+                  <p className="mt-3 text-xl font-black text-white">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
+      <ThreeDFeatureStrip />
       <FloatingProductShowcase />
 
       <section className="page-shell py-10">

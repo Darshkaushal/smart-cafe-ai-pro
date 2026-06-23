@@ -37,3 +37,88 @@ body {
     @apply rounded-3xl border border-admin-line bg-white/[0.045];
   }
 }
+
+/* ===== Royal Admin Cockpit Upgrade ===== */
+.admin-brand-mark {
+  background: linear-gradient(135deg, #fff0b8 0%, #e2a354 48%, #b6ff7d 132%);
+  box-shadow: 0 18px 50px rgba(226, 163, 84, 0.24), inset 0 1px 0 rgba(255,255,255,.58);
+}
+
+.admin-ambient-one,
+.admin-ambient-two {
+  pointer-events: none;
+  position: fixed;
+  z-index: 0;
+  border-radius: 999px;
+  filter: blur(50px);
+  opacity: .35;
+}
+
+.admin-ambient-one {
+  right: 5%;
+  top: 8%;
+  height: 18rem;
+  width: 18rem;
+  background: rgba(226, 163, 84, .18);
+  animation: adminDrift 12s ease-in-out infinite;
+}
+
+.admin-ambient-two {
+  left: 24%;
+  bottom: 2%;
+  height: 20rem;
+  width: 20rem;
+  background: rgba(182, 255, 125, .08);
+  animation: adminDrift 15s ease-in-out infinite reverse;
+}
+
+@keyframes adminDrift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(28px, -18px, 0) scale(1.08); }
+}
+
+.admin-hero-card {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(226,163,84,.18), transparent 22rem),
+    radial-gradient(circle at 88% 16%, rgba(182,255,125,.08), transparent 18rem),
+    linear-gradient(135deg, rgba(255,255,255,.085), rgba(255,255,255,.035));
+  box-shadow: 0 30px 100px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.admin-hero-card::after {
+  content: "";
+  position: absolute;
+  right: -7rem;
+  bottom: -8rem;
+  height: 18rem;
+  width: 18rem;
+  border-radius: 4rem;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(226,163,84,.08);
+  transform: rotateX(28deg) rotateY(-24deg) rotateZ(18deg);
+  animation: adminRotateBlock 10s ease-in-out infinite;
+}
+
+@keyframes adminRotateBlock {
+  0%, 100% { transform: rotateX(24deg) rotateY(-24deg) rotateZ(16deg); }
+  50% { transform: rotateX(42deg) rotateY(18deg) rotateZ(-7deg); }
+}
+
+.admin-kpi-card {
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .35s ease, box-shadow .35s ease;
+}
+
+.admin-kpi-card:hover {
+  transform: translateY(-7px);
+  border-color: rgba(226,163,84,.25);
+  box-shadow: 0 36px 110px rgba(0,0,0,.42), 0 0 40px rgba(226,163,84,.08);
+}
+
+@media (max-width: 640px) {
+  .admin-card {
+    border-radius: 1.35rem;
+    padding: 1rem;
+  }
+}

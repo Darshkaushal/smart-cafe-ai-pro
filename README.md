@@ -176,3 +176,16 @@ The private admin dashboard includes:
 - Real customer review submission and moderation.
 - Calendar-based table capacity management.
 - Production-grade migrations with `prisma migrate deploy`.
+
+## Royal Wow UI Upgrade
+
+This upgrade improves the presentation layer for DK's Cafe with a more premium and royal customer experience:
+
+- Royal aesthetic navbar with desktop dropdown and mobile drawer.
+- 3D rotating homepage hero scene with orbiting cafe mood cards.
+- Smoother responsive motion system for cards, chatbot and hero sections.
+- More polished menu/chat/customer journey emphasis.
+- Upgraded private owner dashboard with premium cockpit-style layout, KPI cards, recent orders/bookings and analytics sections.
+- Improved cafe companion prompts for taste, planning, order help, careers, franchise and presentation questions.
+
+Public pages keep a natural cafe brand tone and avoid exposing internal technical wording to customers.
