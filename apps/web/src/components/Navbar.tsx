@@ -1,106 +1,149 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { CalendarCheck, ChevronRight, Coffee, Menu, Sparkles, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const primaryLinks = [
-  { href: "/", label: "Home" },
-  { href: "/menu", label: "Menu" },
-  { href: "/offers", label: "Offers" },
-  { href: "/gallery", label: "Gallery" },
-  { href: "/events", label: "Events" }
+const mainLinks = [
+  { label: "Home", href: "/" },
+  { label: "Menu", href: "/menu" },
+  { label: "Offers", href: "/offers" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Events", href: "/events" }
 ];
 
 const moreLinks = [
-  { href: "/reviews", label: "Reviews" },
-  { href: "/availability", label: "Availability" },
-  { href: "/track-order", label: "Track order" },
-  { href: "/franchise", label: "Franchise" },
-  { href: "/careers", label: "Careers" },
-  { href: "/contact", label: "Visit" }
+  { label: "Reviews", href: "/reviews" },
+  { label: "Availability", href: "/availability" },
+  { label: "Track order", href: "/track-order" },
+  { label: "Franchise", href: "/franchise" },
+  { label: "Careers", href: "/careers" },
+  { label: "Visit", href: "/contact" }
 ];
 
-function NavLink({ href, label, onClick }: { href: string; label: string; onClick?: () => void }) {
-  const pathname = usePathname();
-  const active = pathname === href;
-  return (
-    <Link
-      href={href}
-      onClick={onClick}
-      className={`rounded-full px-4 py-2 text-sm font-black transition duration-300 ${active ? "bg-cafe-caramel text-cafe-dark shadow-glow" : "text-white/67 hover:bg-white/10 hover:text-white"}`}
-    >
-      {label}
-    </Link>
-  );
-}
-
 export function Navbar() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+    function handleOutsideClick(event: MouseEvent) {
+      if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
+        setMoreOpen(false);
+      }
+    }
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
   return (
-    <header className={`sticky top-0 z-50 border-b transition duration-500 ${scrolled ? "border-cafe-caramel/20 bg-[#070201]/88 shadow-[0_16px_80px_rgba(0,0,0,0.42)] backdrop-blur-2xl" : "border-white/8 bg-[#070201]/60 backdrop-blur-xl"}`}>
-      <nav className="page-shell flex items-center justify-between py-3 lg:py-4">
-        <Link href="/" className="group flex items-center gap-3" aria-label="DK's Cafe home">
-          <span className="brand-mark-royal relative grid h-12 w-12 place-items-center rounded-[1.35rem] text-lg font-black text-cafe-dark transition duration-500 group-hover:-rotate-6 group-hover:scale-105 md:h-14 md:w-14">
-            <span className="relative tracking-[-0.12em]">DK</span>
-          </span>
-          <span className="leading-none">
-            <span className="block text-xl font-black tracking-tight text-white md:text-2xl">DK&apos;s <span className="text-cafe-caramel">Cafe</span></span>
-            <span className="mt-1 hidden text-[10px] font-black uppercase tracking-[0.32em] text-cafe-caramel/70 sm:block">Royal Jaipur Sip House</span>
-          </span>
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0d0503]/90 backdrop-blur-2xl">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+        <Link href="/" className="group flex items-center gap-3">
+          <div className="flex h-14 w-14 items-center justify-center rounded-3xl border border-amber-200/50 bg-gradient-to-br from-amber-200 via-amber-400 to-orange-700 text-lg font-black text-black shadow-[0_18px_60px_rgba(245,158,11,0.35)] transition-transform duration-300 group-hover:rotate-6 group-hover:scale-105">
+            DK
+          </div>
+          <div>
+            <p className="text-2xl font-black tracking-tight text-white">
+              DK&apos;s <span className="text-amber-300">Cafe</span>
+            </p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.42em] text-amber-400/80">
+              Royal Jaipur Sip House
+            </p>
+          </div>
         </Link>
 
-        <div className="hidden items-center rounded-full border border-white/10 bg-white/[0.045] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-2xl lg:flex">
-          {primaryLinks.map((link) => <NavLink key={link.href} {...link} />)}
-          <div className="group relative">
-            <button className="rounded-full px-4 py-2 text-sm font-black text-white/67 transition hover:bg-white/10 hover:text-white">More</button>
-            <div className="invisible absolute right-0 top-12 w-64 translate-y-2 rounded-[1.7rem] border border-white/10 bg-[#100604]/95 p-3 opacity-0 shadow-[0_30px_90px_rgba(0,0,0,0.55)] backdrop-blur-2xl transition duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-              {moreLinks.map((link) => (
-                <Link key={link.href} href={link.href} className="flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-bold text-white/68 transition hover:bg-white/10 hover:text-white">
-                  {link.label}<ChevronRight size={15} className="text-cafe-caramel/70" />
-                </Link>
-              ))}
-            </div>
+        <div className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 p-2 shadow-2xl lg:flex">
+          {mainLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="rounded-full px-5 py-3 text-sm font-black text-white/90 transition-all duration-300 hover:bg-amber-300 hover:text-black"
+            >
+              {link.label}
+            </Link>
+          ))}
+
+          <div ref={moreRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setMoreOpen((value) => !value)}
+              className="rounded-full border border-white/40 px-5 py-3 text-sm font-black text-white transition-all duration-300 hover:bg-white hover:text-black"
+              aria-expanded={moreOpen}
+              aria-haspopup="menu"
+            >
+              More
+            </button>
+
+            {moreOpen && (
+              <div
+                className="absolute right-0 top-[calc(100%+12px)] w-72 rounded-[2rem] border border-amber-200/20 bg-[#120604]/95 p-3 shadow-[0_30px_90px_rgba(0,0,0,0.65)] backdrop-blur-2xl"
+                role="menu"
+              >
+                <div className="absolute -top-4 right-8 h-4 w-24" />
+                {moreLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMoreOpen(false)}
+                    className="group flex items-center justify-between rounded-2xl px-5 py-4 text-sm font-black text-white/90 transition-all duration-300 hover:bg-amber-300 hover:text-black"
+                    role="menuitem"
+                  >
+                    <span>{link.label}</span>
+                    <span className="text-amber-300 transition-all duration-300 group-hover:translate-x-1 group-hover:text-black">
+                      ›
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Link href="/availability" className="rounded-full border border-white/10 bg-white/[0.045] px-4 py-2 text-sm font-black text-white/65 transition hover:border-cafe-caramel/40 hover:text-white">Check tables</Link>
-          <Link href="/booking" className="primary-btn !px-5 !py-2.5"><CalendarCheck size={17} /> Reserve</Link>
+          <Link
+            href="/availability"
+            className="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-black text-white/80 transition-all duration-300 hover:bg-white hover:text-black"
+          >
+            Check tables
+          </Link>
+          <Link
+            href="/booking"
+            className="rounded-full bg-gradient-to-r from-amber-300 to-orange-400 px-6 py-3 text-sm font-black text-black shadow-[0_16px_45px_rgba(245,158,11,0.35)] transition-all duration-300 hover:scale-105"
+          >
+            Reserve
+          </Link>
         </div>
 
-        <button onClick={() => setOpen((value) => !value)} className="relative grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-white/5 text-white shadow-lg lg:hidden" aria-label="Open menu">
-          {open ? <X size={21} /> : <Menu size={21} />}
+        <button
+          type="button"
+          onClick={() => setMobileOpen((value) => !value)}
+          className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-black text-white lg:hidden"
+        >
+          {mobileOpen ? "Close" : "Menu"}
         </button>
       </nav>
 
-      {open && (
-        <div className="page-shell pb-5 lg:hidden">
-          <div className="royal-mobile-menu grid gap-2 rounded-[2rem] border border-white/10 bg-[#100604]/96 p-3 shadow-[0_30px_90px_rgba(0,0,0,0.55)] backdrop-blur-2xl">
-            <div className="mb-2 flex items-center gap-3 rounded-3xl bg-white/[0.055] p-3">
-              <span className="grid h-11 w-11 place-items-center rounded-2xl bg-cafe-caramel text-cafe-dark"><Coffee size={20} /></span>
-              <div>
-                <p className="font-black text-white">Choose your vibe</p>
-                <p className="text-xs text-white/45">Menu, tables, events and reviews</p>
-              </div>
-            </div>
-            {[...primaryLinks, ...moreLinks].map((link) => <NavLink key={link.href} {...link} onClick={() => setOpen(false)} />)}
-            <Link href="/booking" onClick={() => setOpen(false)} className="primary-btn mt-2 w-full"><Sparkles size={17} /> Reserve a royal table</Link>
+      {mobileOpen && (
+        <div className="border-t border-white/10 bg-[#0d0503]/95 px-4 py-5 backdrop-blur-2xl lg:hidden">
+          <div className="grid gap-2">
+            {[...mainLinks, ...moreLinks].map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-black text-white transition-all duration-300 hover:bg-amber-300 hover:text-black"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Link
+              href="/booking"
+              onClick={() => setMobileOpen(false)}
+              className="mt-2 rounded-2xl bg-gradient-to-r from-amber-300 to-orange-400 px-5 py-4 text-center text-sm font-black text-black"
+            >
+              Reserve Table
+            </Link>
           </div>
         </div>
       )}
