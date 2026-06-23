@@ -120,7 +120,7 @@ export function MenuOrder({ items }: { items: MenuItem[] }) {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-semibold text-cafe-caramel">Fast checkout</p>
-            <h2 className="mt-1 text-3xl font-black text-white">Quick Order</h2>
+            <h2 className="mt-1 text-3xl font-black text-white quick-order-scroll">Quick Order</h2>
           </div>
           <div className="relative grid h-14 w-14 place-items-center rounded-3xl bg-cafe-caramel text-cafe-dark">
             <ShoppingBag />
